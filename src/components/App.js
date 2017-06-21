@@ -2,15 +2,16 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Nav from './Nav';
 import Home from './Home';
-import NewReceipt from './NewReceipt';
+import AddReceipt from './AddReceipt';
+import AddStore from './AddStore';
 
 class Content extends React.Component {
     render() {
         let html = <div></div>;
 
         switch (this.props.page) {
-            case 'new-receipt':
-                html = <NewReceipt content={this.props.content} />
+            case 'add-receipt':
+                html = <AddReceipt content={this.props.content} />
                 break;
         }
 
@@ -41,7 +42,8 @@ class App extends React.Component {
 
                     <Switch>
                         <Route exact path='/' component={Home} />
-                        <Route path='/new-receipt' component={NewReceipt} />
+                        <Route path='/add-receipt' component={AddReceipt} />
+                        <Route path='/add-store' component={AddStore} />
                         <Route render={() => <p>404 Not Found</p>} />
                     </Switch>
                 </div>

@@ -4,9 +4,9 @@ import { NavLink } from 'react-router-dom';
 // TODO: Change key values!
 
 const navItems = [
-    'New Receipt',
-    'New Store',
-    'New Product',
+    'Add Receipt',
+    'Add Store',
+    'Add Product',
     'Query'
 ];
 
@@ -23,20 +23,20 @@ export default function Nav() {
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/new-receipt'>
-                    New Receipt
+                <NavLink activeClassName='active' to='/add-receipt'>
+                    Add Receipt
                 </NavLink>
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/new-store'>
-                    New Store
+                <NavLink activeClassName='active' to='/add-store'>
+                    Add Store
                 </NavLink>
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/new-product'>
-                    New Product
+                <NavLink activeClassName='active' to='/add-product'>
+                    Add Product
                 </NavLink>
             </li>
 

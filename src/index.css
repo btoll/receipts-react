@@ -34,3 +34,29 @@ ul.nav a.active {
     text-decoration: underline;
 }
 
+form {
+    margin: 40px 0 0 40px;
+/*    margin: 40px auto 0;*/
+/*    width: 44%;*/
+}
+
+form fieldset {
+    width: 35%;
+}
+
+form div {
+    margin: 10px;
+}
+
+form div label {
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 10px;
+    text-align: right;
+    width: 150px;
+}
+
+form div input {
+    width: 85px;
+}
+
