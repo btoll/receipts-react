@@ -1,4 +1,6 @@
 import React from 'react';
+import Form from './Form';
+import Item from './Item';
 
 // TODO: Change key values!
 // TODO: prop types!
@@ -20,19 +22,19 @@ export default class AddReceipt extends React.Component {
             totalCost: 0.00
         };
 
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onStateChange = this.onStateChange.bind(this);
     }
 
     render() {
+        const items = [];
+
         return (
-            <form onSubmit={this.onSubmit}>
-                <fieldset>
-                    <legend>Add Receipt</legend>
+            <div>
+                <Form onStateChange={this.onStateChange} legend='Add Receipt'>
                     <div>
                         <label htmlFor='stores'>Select Store:</label>
 
-                        <select id='stores' name="list" value={this.state.list} onChange={this.onChange}>
+                        <select id='stores' name="list" value={this.state.list} onChange={this.props.onChange}>
                             <option>Select Store</option> {
                                 stores.map((store, index) =>
                                     <option key={index}>{store.name}</option>
@@ -49,7 +51,7 @@ export default class AddReceipt extends React.Component {
                             name='totalCost'
                             type='text'
                             value={this.state.totalCost}
-                            onChange={this.onChange} />
+                            onChange={this.props.onChange} />
                     </div>
 
                     <div>
@@ -61,33 +63,19 @@ export default class AddReceipt extends React.Component {
                             type='text'
                             placeholder='mm/dd/yyyy'
                             value={this.state.purchaseDate}
-                            onChange={this.onChange} />
+                            onChange={this.props.onChange} />
                     </div>
 
-                    <div>
-                        <label></label>
-                        <button
-                            className='submit'
-                            type='submit'>
-                            Submit
-                        </button>
+                    <div id='items'>
+                        <Item />
                     </div>
-                </fieldset>
-            </form>
+                </Form>
+            </div>
         );
     }
 
-    onSubmit(e) {
-        e.preventDefault();
-        alert('pete!');
-    }
-
-    onChange(e) {
-        const target = e.target;
-
-        this.setState({
-            [target.name]: target.value
-        });
+    onStateChange(state) {
+        this.setState(state);
     }
 }
 

@@ -6,8 +6,6 @@ body {
 
 ul.nav {
     background-color: turquoise;
-    display: flex;
-/*    justify-content: center;*/
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -22,12 +20,16 @@ ul.nav li {
 ul.nav li:hover {
     background-color: #ccc;
     border-color: #000;
-    cursor: pointer;
 }
 
 ul.nav a {
     color: black;
+    display: inline-block;
     text-decoration: none;
+}
+
+ul.nav a:hover {
+    cursor: pointer;
 }
 
 ul.nav a.active {
@@ -56,7 +58,20 @@ form div label {
     width: 150px;
 }
 
+form div#items label {
+    display: inline;
+}
+
 form div input {
     width: 85px;
+}
+
+form div#items input {
+    margin-left: 10px;
+    width: 35px;
+}
+
+form div#items button.remove {
+    margin-left: 3px;
 }
 

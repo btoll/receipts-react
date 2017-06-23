@@ -4,6 +4,8 @@ import Nav from './Nav';
 import Home from './Home';
 import AddReceipt from './AddReceipt';
 import AddStore from './AddStore';
+import AddProduct from './AddProduct';
+import Query from './Query';
 
 class Content extends React.Component {
     render() {
@@ -33,7 +35,6 @@ class App extends React.Component {
         };
     }
 
-    //                 <Content page={this.state.page} content={this.state.content} />
     render() {
         return (
             <BrowserRouter>
@@ -44,6 +45,8 @@ class App extends React.Component {
                         <Route exact path='/' component={Home} />
                         <Route path='/add-receipt' component={AddReceipt} />
                         <Route path='/add-store' component={AddStore} />
+                        <Route path='/add-product' component={AddProduct} />
+                        <Route path='/query' component={Query} />
                         <Route render={() => <p>404 Not Found</p>} />
                     </Switch>
                 </div>
