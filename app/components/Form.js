@@ -13,7 +13,7 @@ export default class Form extends React.Component {
 
     render() {
         return (
-            <form onChange={this.onChange}>
+            <form className={this.props.className} onChange={this.onChange}>
                 <fieldset>
                     <legend>{this.props.legend}</legend>
 

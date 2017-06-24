@@ -1,6 +1,6 @@
 import React from 'react';
 import Form from './Form';
-import Item from './Item';
+import ListItems from './ListItems';
 
 // TODO: Change key values!
 // TODO: prop types!
@@ -30,18 +30,26 @@ export default class AddReceipt extends React.Component {
 
         return (
             <div>
-                <Form onStateChange={this.onStateChange} legend='Add Receipt'>
+                <Form className='add-receipt' onStateChange={this.onStateChange} legend='Add Receipt'>
                     <div>
                         <label htmlFor='stores'>Select Store:</label>
 
-                        <select id='stores' name="list" value={this.state.list} onChange={this.props.onChange}>
-                            <option>Select Store</option> {
+                        <select
+                            id='stores'
+                            name="list"
+                            value={this.state.list}
+                            onChange={this.props.onChange}
+                        >
+                            <option>Select Store</option>
+                            {
                                 stores.map((store, index) =>
                                     <option key={index}>{store.name}</option>
                                 )
                             }
                         </select>
                     </div>
+
+                    <ListItems />
 
                     <div>
                         <label htmlFor='totalCost'>Total Cost:</label>
@@ -64,10 +72,6 @@ export default class AddReceipt extends React.Component {
                             placeholder='mm/dd/yyyy'
                             value={this.state.purchaseDate}
                             onChange={this.props.onChange} />
-                    </div>
-
-                    <div id='items'>
-                        <Item />
                     </div>
                 </Form>
             </div>

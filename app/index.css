@@ -58,20 +58,32 @@ form div label {
     width: 150px;
 }
 
-form div#items label {
-    display: inline;
-}
-
 form div input {
     width: 85px;
 }
 
+form.add-receipt fieldset {
+    width: 42%;
+}
+
+form div#items {
+    background: turquoise;
+    margin: 0;
+    padding: 10px;
+}
+
+form div#items label {
+    display: inline;
+    margin-right: 10px;
+}
+
 form div#items input {
-    margin-left: 10px;
     width: 35px;
 }
 
-form div#items button.remove {
+form div#items input,
+form div#items select,
+form div#items button + button {
     margin-left: 3px;
 }
 
