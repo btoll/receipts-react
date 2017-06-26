@@ -63,13 +63,21 @@ form div input {
 }
 
 form.add-receipt fieldset {
-    width: 42%;
+    width: 45%;
 }
 
 form div#items {
     background: turquoise;
     margin: 0;
-    padding: 10px;
+    padding: 5px 5px 10px;
+}
+
+form div#items h3 {
+    margin: 0;
+}
+
+form div#items div {
+    text-align: center;
 }
 
 form div#items label {
@@ -82,8 +90,7 @@ form div#items input {
 }
 
 form div#items input,
-form div#items select,
-form div#items button + button {
+form div#items select {
     margin-left: 3px;
 }
 

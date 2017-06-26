@@ -1,5 +1,5 @@
 import React from 'react';
-import Form from './Form';
+import axios from 'axios';
 
 // TODO: Change key values!
 // TODO: prop types!
@@ -9,43 +9,71 @@ export default class AddProduct extends React.Component {
         super(props);
 
         this.state = {
-            name: '',
-            product: ''
+            product: '',
+            brand: ''
         };
 
-        this.onStateChange = this.onStateChange.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     render() {
         return (
-            <Form onStateChange={this.onStateChange} legend='Add Product'>
-                <div>
-                    <label htmlFor='name'>Name:</label>
+            <form className='add-product' onSubmit={this.onSubmit}>
+                <fieldset>
+                    <legend>Add Product</legend>
 
-                    <input
-                        id='name'
-                        name='name'
-                        type='text'
-                        value={this.state.name}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='product'>Product:</label>
 
-                <div>
-                    <label htmlFor='street'>Product:</label>
+                        <input
+                            id='product'
+                            name='product'
+                            type='text'
+                            value={this.state.product}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='product'
-                        name='product'
-                        type='text'
-                        value={this.state.product}
-                        onChange={this.props.onChange} />
-                </div>
-            </Form>
+                    <div>
+                        <label htmlFor='brand'>Brand:</label>
+
+                        <input
+                            id='brand'
+                            name='brand'
+                            type='text'
+                            value={this.state.brand}
+                            onChange={this.onChange} />
+                    </div>
+
+                    <div>
+                        <label></label>
+                        <button
+                            onClick={this.onSubmit}
+                            className='submit'
+                            type='submit'>
+                            Submit
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
         );
     }
 
-    onStateChange(state) {
-        this.setState(state);
+    onChange(e) {
+        const target = e.target;
+
+        this.setState({
+            [target.name]: target.value
+        });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        // TODO: Move uri out of this file.
+        axios.post('http://localhost:3000/products', this.state)
+        .then(() => console.log('success'))
+        .catch(() => console.log('error'));
     }
 }
 

@@ -1,10 +1,9 @@
 import React from 'react';
+import axios from 'axios';
 
 /*
  * TODO
  *
- *      - disable all Add buttons except the most recent
- *      - since the item html names are the same, will itemCost and itemQuantity be arrays of values upon form submission?
  *
  */
 
@@ -13,37 +12,61 @@ export default class ListItems extends React.Component {
         super(props);
 
         this.state = {
-            items: 1
+            count: 0,
+            items: []
         };
 
-        this.onAddItem = this.onAddItem.bind(this);
+        this.onAdd = this.onAdd.bind(this);
+        this.onItemChange = this.onItemChange.bind(this);
     }
 
     render() {
         const items = [];
 
-        for (let i = 0, len = this.state.items; i < len; i++) {
-            items.push(<Item key={i} onAddItem={this.onAddItem} onRemoveItem={this.onRemoveItem} />);
+        for (let i = 0, len = this.state.count; i < len; i++) {
+            items.push(<Item key={i} id={i} items={this.state.items} onItemChange={this.onItemChange} />);
         }
 
         return (
             <div id='items'>
                 <h3>Items</h3>
+                <button onClick={this.onAdd}>+</button>
                 {items}
             </div>
         );
     }
 
-    onAddItem(e) {
+    componentDidMount() {
+        axios.get('http://localhost:3000/products')
+        .then(results =>
+            this.setState({
+                items: results.data
+            })
+        )
+        .catch(console.log);
+    }
+
+    onAdd(e) {
         e.preventDefault();
 
         this.setState({
-            items: this.state.items + 1
+            count: this.state.count + 1
+        });
+
+        // Pass up a new item with default values.
+        this.props.onAddItem({
+            itemId: 0,
+            itemCost: 0,
+            itemQuantity: 0
         });
     }
 
-    onRemoveItem(e) {
-        e.preventDefault();
+    onItemChange(id, name, value) {
+        this.props.onItemChange(id, name, value);
+    }
+
+    onRemove(e) {
+        // TODO
     }
 }
 
@@ -52,8 +75,9 @@ class Item extends React.Component {
         super(props);
 
         this.state = {
-            itemCost: 0.00,
+            id: this.props.id,
             itemId: 0,
+            itemCost: 0,
             itemQuantity: 0
         };
 
@@ -65,11 +89,16 @@ class Item extends React.Component {
             <div>
                 <label htmlFor='itemId'>Item:
                     <select
-                        name="itemId"
+                        name='itemId'
                         value={this.state.itemId}
                         onChange={this.onChange}
                     >
-                        <option>Select Item</option>
+                        <option>Select Store</option>
+                        {
+                            this.props.items.map(item =>
+                                <option key={item.id} value={item.id}>{item.product} {item.brand}</option>
+                            )
+                        }
                     </select>
                 </label>
 
@@ -92,8 +121,7 @@ class Item extends React.Component {
                 </label>
 
                 <label>
-                    <button onClick={this.props.onAddItem}>+</button>
-                    <button onClick={this.props.onRemoveItem}>-</button>
+                    <button>-</button>
                 </label>
             </div>
         );
@@ -105,6 +133,8 @@ class Item extends React.Component {
         this.setState({
             [target.name]: target.value
         });
+
+        this.props.onItemChange(this.state.id, target.name, target.value);
     }
 }
 

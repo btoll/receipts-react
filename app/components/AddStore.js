@@ -1,22 +1,15 @@
 import React from 'react';
-import Form from './Form';
+import axios from 'axios';
 
 // TODO: Change key values!
 // TODO: prop types!
-
-const stores = [
-    { name: "Lowe's", street: 'Lancaster Road', city: 'Leominster', state: 'MA' },
-    { name: 'Tractor Supply Co.', street: 'Lancaster Road', city: 'Leominster', state: 'MA' },
-    { name: 'Pickity Place', street: '248 Nutting Hill Road', city: 'Mason', state: 'NH' },
-    { name: 'Gardner Agway', street: '3 West Broadway', city: 'Gardner', state: 'MA' }
-];
 
 export default class AddStore extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: '',
+            store: '',
             street: '',
             city: '',
             state: '',
@@ -24,87 +17,116 @@ export default class AddStore extends React.Component {
             phone: ''
         };
 
-        this.onStateChange = this.onStateChange.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     render() {
         return (
-            <Form onStateChange={this.onStateChange} legend='Add Store'>
-                <div>
-                    <label htmlFor='name'>Name:</label>
+            <form className='add-store' onSubmit={this.onSubmit}>
+                <fieldset>
+                    <legend>Add Store</legend>
 
-                    <input
-                        id='name'
-                        name='name'
-                        type='text'
-                        value={this.state.name}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='store'>Name:</label>
 
-                <div>
-                    <label htmlFor='street'>Street:</label>
+                        <input
+                            id='store'
+                            name='store'
+                            type='text'
+                            value={this.state.store}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='street'
-                        name='street'
-                        type='text'
-                        placeholder='Optional'
-                        value={this.state.street}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='street'>Street:</label>
 
-                <div>
-                    <label htmlFor='city'>City:</label>
+                        <input
+                            id='street'
+                            name='street'
+                            type='text'
+                            placeholder='Optional'
+                            value={this.state.street}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='city'
-                        name='city'
-                        type='text'
-                        value={this.state.city}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='city'>City:</label>
 
-                <div>
-                    <label htmlFor='state'>State:</label>
+                        <input
+                            id='city'
+                            name='city'
+                            type='text'
+                            value={this.state.city}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='state'
-                        name='state'
-                        type='text'
-                        placeholder='MA'
-                        value={this.state.state}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='state'>State:</label>
 
-                <div>
-                    <label htmlFor='zip'>Zip:</label>
+                        <input
+                            id='state'
+                            name='state'
+                            type='text'
+                            placeholder='MA'
+                            value={this.state.state}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='zip'
-                        name='zip'
-                        type='text'
-                        placeholder='Optional'
-                        value={this.state.zip}
-                        onChange={this.props.onChange} />
-                </div>
+                    <div>
+                        <label htmlFor='zip'>Zip:</label>
 
-                <div>
-                    <label htmlFor='phone'>Phone:</label>
+                        <input
+                            id='zip'
+                            name='zip'
+                            type='text'
+                            placeholder='Optional'
+                            value={this.state.zip}
+                            onChange={this.onChange} />
+                    </div>
 
-                    <input
-                        id='phone'
-                        name='phone'
-                        type='text'
-                        placeholder='717-737-8879'
-                        value={this.state.phone}
-                        onChange={this.props.onChange} />
-                </div>
-            </Form>
+                    <div>
+                        <label htmlFor='phone'>Phone:</label>
+
+                        <input
+                            id='phone'
+                            name='phone'
+                            type='text'
+                            placeholder='717-737-8879'
+                            value={this.state.phone}
+                            onChange={this.onChange} />
+                    </div>
+
+                    <div>
+                        <label></label>
+                        <button
+                            onClick={this.onSubmit}
+                            className='submit'
+                            type='submit'>
+                            Submit
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
         );
     }
 
-    onStateChange(state) {
-        this.setState(state);
+    onChange(e) {
+        const target = e.target;
+
+        this.setState({
+            [target.name]: target.value
+        });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        // TODO: Clear state when submitted.
+        // TODO: Move uri out of this file.
+        axios.post('http://localhost:3000/stores', this.state)
+        .then(() => console.log('success'))
+        .catch(() => console.log('error'));
     }
 }
 
