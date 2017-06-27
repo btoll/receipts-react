@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { PRODUCTS_URL } from '../config';
 
-// TODO: Change key values!
 // TODO: prop types!
 
 export default class AddProduct extends React.Component {
@@ -70,8 +70,7 @@ export default class AddProduct extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        // TODO: Move uri out of this file.
-        axios.post('http://localhost:3000/products', this.state)
+        axios.post(PRODUCTS_URL, this.state)
         .then(() => console.log('success'))
         .catch(() => console.log('error'));
     }

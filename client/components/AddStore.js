@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { STORES_URL } from '../config';
 
 // TODO: Change key values!
 // TODO: prop types!
@@ -45,7 +46,6 @@ export default class AddStore extends React.Component {
                             id='street'
                             name='street'
                             type='text'
-                            placeholder='Optional'
                             value={this.state.street}
                             onChange={this.onChange} />
                     </div>
@@ -80,7 +80,6 @@ export default class AddStore extends React.Component {
                             id='zip'
                             name='zip'
                             type='text'
-                            placeholder='Optional'
                             value={this.state.zip}
                             onChange={this.onChange} />
                     </div>
@@ -123,8 +122,7 @@ export default class AddStore extends React.Component {
         e.preventDefault();
 
         // TODO: Clear state when submitted.
-        // TODO: Move uri out of this file.
-        axios.post('http://localhost:3000/stores', this.state)
+        axios.post(STORES_URL, this.state)
         .then(() => console.log('success'))
         .catch(() => console.log('error'));
     }

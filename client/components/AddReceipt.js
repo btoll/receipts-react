@@ -1,16 +1,10 @@
 import React from 'react';
 import ListItems from './ListItems';
 import axios from 'axios';
+import { STORES_URL } from '../config';
 
 // TODO: Change key values!
 // TODO: prop types!
-
-// const stores = [
-//     { name: "Lowe's", street: 'Lancaster Road', city: 'Leominster', state: 'MA' },
-//     { name: 'Tractor Supply Co.', street: 'Lancaster Road', city: 'Leominster', state: 'MA' },
-//     { name: 'Pickity Place', street: '248 Nutting Hill Road', city: 'Mason', state: 'NH' },
-//     { name: 'Gardner Agway', street: '3 West Broadway', city: 'Gardner', state: 'MA' }
-// ];
 
 export default class AddReceipt extends React.Component {
     constructor(props) {
@@ -24,18 +18,12 @@ export default class AddReceipt extends React.Component {
             stores: []
         };
 
-        this.onAddItem = this.onAddItem.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.onItemChange = this.onItemChange.bind(this);
+        this.onListItemsChange = this.onListItemsChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-
-        // TODO
-//         this.onRemoveItem = this.onRemoveItem.bind(this);
     }
 
     render() {
-        const items = [];
-
         return (
             <form className='add-receipt' onSubmit={this.onSubmit}>
                 <fieldset>
@@ -58,7 +46,7 @@ export default class AddReceipt extends React.Component {
                         </select>
                     </div>
 
-                    <ListItems onAddItem={this.onAddItem} onItemChange={this.onItemChange} />
+                    <ListItems onListItemsChange={this.onListItemsChange} />
 
                     <div>
                         <label htmlFor='totalCost'>Total Cost:</label>
@@ -96,21 +84,14 @@ export default class AddReceipt extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:3000/stores')
+        axios.get(STORES_URL)
         .then(results => {
-            console.log(results);
+            // TODO: stores shouldn't be in state!
             this.setState({
                 stores: results.data
             })
         })
         .catch(console.log);
-    }
-
-    onAddItem(itemState) {
-        this.setState(() => (
-            this.state.items.push(itemState),
-            this.state
-        ));
     }
 
     onChange(e) {
@@ -121,14 +102,16 @@ export default class AddReceipt extends React.Component {
         });
     }
 
-    onItemChange(id, name, value) {
-        this.setState(() => (
-            this.state.items[id][name] = value,
-            this.state
-        ));
+    // TODO: Is this incredibly expensive? Is it re-rendering everything, including children, everytime?
+    // All loggers in render() methods are invoked...
+    onListItemsChange(items) {
+        this.setState({
+            items: items
+        });
     }
 
     onSubmit(e) {
+        console.dir(this.state);
         e.preventDefault();
     }
 }

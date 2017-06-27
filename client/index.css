@@ -73,7 +73,8 @@ form div#items {
 }
 
 form div#items h3 {
-    margin: 0;
+    display: inline;
+    margin: 0 5px 0 0;
 }
 
 form div#items div {

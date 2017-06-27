@@ -2,7 +2,7 @@
   "name": "receipts-react",
   "version": "0.1.0",
   "description": "",
-  "main": "app/index.js",
+  "main": "./client/index.js",
   "scripts": {
     "start": "webpack-dev-server --open"
   },
@@ -29,6 +29,7 @@
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.5.2",
     "babel-preset-react": "^6.24.1",
     "css-loader": "^0.28.4",

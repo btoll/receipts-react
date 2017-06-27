@@ -3,7 +3,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './app/index.js',
+    // `babel-polyfill` is needed for the generator in config.js and MUST be first in the array!
+    entry: ['babel-polyfill', './client/index.js'],
 
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -27,7 +28,7 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template: './app/index.html'
+            template: './client/index.html'
         })
     ]
 };
