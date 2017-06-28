@@ -1,4 +1,4 @@
-const mysql = require('/home/btoll/connect_db');
+const mysql = require(process.env.RECEIPTS_DB);
 
 const routeFn = route =>
     (req, res) =>
