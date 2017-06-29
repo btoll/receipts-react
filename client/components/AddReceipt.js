@@ -111,7 +111,17 @@ export default class AddReceipt extends React.Component {
         e.preventDefault();
 
         axios.post(RECEIPTS_URL, this.state)
-        .then(() => console.log('success'))
+        .then(() => {
+            this.setState({
+                storeId: '',
+                items: [],
+                totalCost: 0.00,
+                purchaseDate: '',
+                stores: []
+            });
+
+            this.onSubmitted = true;
+        })
         .catch(() => console.log('error'));
     }
 }

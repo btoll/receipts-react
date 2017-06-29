@@ -68,9 +68,18 @@ export default class AddProduct extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        axios.post(PRODUCTS_URL, this.state)
-        .then(() => console.log('success'))
-        .catch(() => console.log('error'));
+        if (Object.keys(this.state).every(key => !!this.state[key])) {
+            axios.post(PRODUCTS_URL, this.state)
+            .then(() =>
+                this.setState({
+                    product: '',
+                    brand: ''
+                })
+            )
+            .catch(() => console.log('error'));
+        } else {
+            alert('All fields must be completed.');
+        }
     }
 }
 

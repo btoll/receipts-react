@@ -118,10 +118,23 @@ export default class AddStore extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        // TODO: Clear state when submitted.
-        axios.post(STORES_URL, this.state)
-        .then(() => console.log('success'))
-        .catch(() => console.log('error'));
+        if (!(this.state.store)) {
+            alert('Name cannot be blank');
+        } else {
+            // TODO: Clear state when submitted.
+            axios.post(STORES_URL, this.state)
+            .then(() =>
+                this.setState({
+                    store: '',
+                    street: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    phone: ''
+                })
+            )
+            .catch(() => console.log('error'));
+        }
     }
 }
 

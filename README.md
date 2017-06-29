@@ -7,7 +7,6 @@ It is a work in progress, but I do use it for my farm receipts.
 TODO:
 
 - Redux
-- propTypes
 - Forms:
     + Validation
     + Clearing after successful submission
