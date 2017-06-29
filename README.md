@@ -11,7 +11,6 @@ TODO:
     + More robust validation
     + Disable Submit button
     + Canceling
-    + Errors
 
 ## Start the http server
 

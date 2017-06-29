@@ -1,4 +1,5 @@
 import React from 'react';
+import Error from './Error';
 import axios from 'axios';
 import { PRODUCTS_URL } from '../config';
 
@@ -8,7 +9,8 @@ export default class AddProduct extends React.Component {
 
         this.state = {
             product: '',
-            brand: ''
+            brand: '',
+            errors: []
         };
 
         this.onChange = this.onChange.bind(this);
@@ -17,43 +19,47 @@ export default class AddProduct extends React.Component {
 
     render() {
         return (
-            <form className='add-product' onSubmit={this.onSubmit}>
-                <fieldset>
-                    <legend>Add Product</legend>
+            <div>
+                <form className='add-product' onSubmit={this.onSubmit}>
+                    <fieldset>
+                        <legend>Add Product</legend>
 
-                    <div>
-                        <label htmlFor='product'>Product:</label>
+                        <div>
+                            <label htmlFor='product'>Product:</label>
 
-                        <input
-                            id='product'
-                            name='product'
-                            type='text'
-                            value={this.state.product}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='product'
+                                name='product'
+                                type='text'
+                                value={this.state.product}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='brand'>Brand:</label>
+                        <div>
+                            <label htmlFor='brand'>Brand:</label>
 
-                        <input
-                            id='brand'
-                            name='brand'
-                            type='text'
-                            value={this.state.brand}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='brand'
+                                name='brand'
+                                type='text'
+                                value={this.state.brand}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label></label>
-                        <button
-                            onClick={this.onSubmit}
-                            className='submit'
-                            type='submit'>
-                            Submit
-                        </button>
-                    </div>
-                </fieldset>
-            </form>
+                        <div>
+                            <label></label>
+                            <button
+                                onClick={this.onSubmit}
+                                className='submit'
+                                type='submit'>
+                                Submit
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
+            </div>
         );
     }
 
@@ -68,17 +74,24 @@ export default class AddProduct extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        if (Object.keys(this.state).every(key => !!this.state[key])) {
+        const errors = Object.keys(this.state)
+            .filter(key => key !== 'errors' && !this.state[key])
+            .map(key => key);
+
+        if (!errors.length) {
             axios.post(PRODUCTS_URL, this.state)
             .then(() =>
                 this.setState({
                     product: '',
-                    brand: ''
+                    brand: '',
+                    errors: []
                 })
             )
             .catch(() => console.log('error'));
         } else {
-            alert('All fields must be completed.');
+            this.setState({
+                errors: errors
+            });
         }
     }
 }

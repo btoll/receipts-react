@@ -1,4 +1,5 @@
 import React from 'react';
+import Error from './Error';
 import ListItems from './ListItems';
 import axios from 'axios';
 import {
@@ -17,6 +18,7 @@ export default class AddReceipt extends React.Component {
             totalCost: 0.00,
             purchaseDate: '',
             items: [],
+            errors: [],
 
             // The following shouldn't be in state b/c they won't change in the form, but ???
             products: [],
@@ -32,71 +34,75 @@ export default class AddReceipt extends React.Component {
 
     render() {
         return (
-            <form className='add-receipt' onSubmit={this.onSubmit}>
-                <fieldset>
-                    <legend>Add Receipt</legend>
+            <div>
+                <form className='add-receipt' onSubmit={this.onSubmit}>
+                    <fieldset>
+                        <legend>Add Receipt</legend>
 
-                    <div>
-                        <label htmlFor='stores'>Select Store:</label>
-                        <select
-                            id='stores'
-                            name='storeId'
-                            value={this.state.storeId}
-                            onChange={this.onChange}
-                        >
-                            <option>Select Store</option>
-                            {
-                                this.state.stores.map((store) =>
-                                    <option key={store.id} value={store.id}>{store.store}</option>
-                                )
-                            }
-                        </select>
-                    </div>
+                        <div>
+                            <label htmlFor='stores'>Select Store:</label>
+                            <select
+                                id='stores'
+                                name='storeId'
+                                value={this.state.storeId}
+                                onChange={this.onChange}
+                            >
+                                <option>Select Store</option>
+                                {
+                                    this.state.stores.map((store) =>
+                                        <option key={store.id} value={store.id}>{store.store}</option>
+                                    )
+                                }
+                            </select>
+                        </div>
 
-                    <div id='items'>
-                        <h3>Items</h3>
-                        <button onClick={this.onAdd}>+</button>
+                        <div id='items'>
+                            <h3>Items</h3>
+                            <button onClick={this.onAdd}>+</button>
 
-                        <ListItems
-                            items={this.state.items}
-                            products={this.state.products}
-                            onListItemChange={this.onListItemChange}
-                            onListItemRemove={this.onListItemRemove}
-                        />
-                    </div>
+                            <ListItems
+                                items={this.state.items}
+                                products={this.state.products}
+                                onListItemChange={this.onListItemChange}
+                                onListItemRemove={this.onListItemRemove}
+                            />
+                        </div>
 
-                    <div>
-                        <label htmlFor='totalCost'>Total Cost:</label>
-                        <input
-                            id='totalCost'
-                            name='totalCost'
-                            type='text'
-                            value={this.state.totalCost}
-                            onChange={this.onChange} />
-                    </div>
+                        <div>
+                            <label htmlFor='totalCost'>Total Cost:</label>
+                            <input
+                                id='totalCost'
+                                name='totalCost'
+                                type='text'
+                                value={this.state.totalCost}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='purchaseDate'>Date of Purchase:</label>
-                        <input
-                            id='purchaseDate'
-                            name='purchaseDate'
-                            type='text'
-                            placeholder='mm/dd/yyyy'
-                            value={this.state.purchaseDate}
-                            onChange={this.onChange} />
-                    </div>
+                        <div>
+                            <label htmlFor='purchaseDate'>Date of Purchase:</label>
+                            <input
+                                id='purchaseDate'
+                                name='purchaseDate'
+                                type='text'
+                                placeholder='mm/dd/yyyy'
+                                value={this.state.purchaseDate}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label></label>
-                        <button
-                            onClick={this.onSubmit}
-                            className='submit'
-                            type='submit'>
-                            Submit
-                        </button>
-                    </div>
-                </fieldset>
-            </form>
+                        <div>
+                            <label></label>
+                            <button
+                                onClick={this.onSubmit}
+                                className='submit'
+                                type='submit'>
+                                Submit
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
+            </div>
         );
     }
 
@@ -173,16 +179,16 @@ export default class AddReceipt extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
+        // TODO: Add validation.
         axios.post(RECEIPTS_URL, this.state)
         .then(() => {
             this.setState({
                 storeId: '',
                 totalCost: 0.00,
                 purchaseDate: '',
-                items: []
+                items: [],
+                errors: []
             });
-
-            this.onSubmitted = true;
         })
         .catch(() => console.log('error'));
     }

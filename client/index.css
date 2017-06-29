@@ -96,3 +96,21 @@ form div#items select {
     margin-left: 3px;
 }
 
+#error {
+    background-color: red;
+    border: 1px solid #000;
+    color: #fff;
+    font-size: 14px;
+    margin: 20px 0 0 40px;
+    padding: 10px;
+    width: 270px;
+}
+
+#error p {
+    margin: 0;
+}
+
+#error ul {
+    list-style-type: decimal;
+}
+

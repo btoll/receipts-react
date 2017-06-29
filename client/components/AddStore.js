@@ -1,4 +1,5 @@
 import React from 'react';
+import Error from './Error';
 import axios from 'axios';
 import { STORES_URL } from '../config';
 
@@ -12,7 +13,8 @@ export default class AddStore extends React.Component {
             city: '',
             state: '',
             zip: '',
-            phone: ''
+            phone: '',
+            errors: []
         };
 
         this.onChange = this.onChange.bind(this);
@@ -21,89 +23,93 @@ export default class AddStore extends React.Component {
 
     render() {
         return (
-            <form className='add-store' onSubmit={this.onSubmit}>
-                <fieldset>
-                    <legend>Add Store</legend>
+            <div>
+                <form className='add-store' onSubmit={this.onSubmit}>
+                    <fieldset>
+                        <legend>Add Store</legend>
 
-                    <div>
-                        <label htmlFor='store'>Name:</label>
+                        <div>
+                            <label htmlFor='store'>Name:</label>
 
-                        <input
-                            id='store'
-                            name='store'
-                            type='text'
-                            value={this.state.store}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='store'
+                                name='store'
+                                type='text'
+                                value={this.state.store}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='street'>Street:</label>
+                        <div>
+                            <label htmlFor='street'>Street:</label>
 
-                        <input
-                            id='street'
-                            name='street'
-                            type='text'
-                            value={this.state.street}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='street'
+                                name='street'
+                                type='text'
+                                value={this.state.street}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='city'>City:</label>
+                        <div>
+                            <label htmlFor='city'>City:</label>
 
-                        <input
-                            id='city'
-                            name='city'
-                            type='text'
-                            value={this.state.city}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='city'
+                                name='city'
+                                type='text'
+                                value={this.state.city}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='state'>State:</label>
+                        <div>
+                            <label htmlFor='state'>State:</label>
 
-                        <input
-                            id='state'
-                            name='state'
-                            type='text'
-                            placeholder='MA'
-                            value={this.state.state}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='state'
+                                name='state'
+                                type='text'
+                                placeholder='MA'
+                                value={this.state.state}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='zip'>Zip:</label>
+                        <div>
+                            <label htmlFor='zip'>Zip:</label>
 
-                        <input
-                            id='zip'
-                            name='zip'
-                            type='text'
-                            value={this.state.zip}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='zip'
+                                name='zip'
+                                type='text'
+                                value={this.state.zip}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label htmlFor='phone'>Phone:</label>
+                        <div>
+                            <label htmlFor='phone'>Phone:</label>
 
-                        <input
-                            id='phone'
-                            name='phone'
-                            type='text'
-                            placeholder='717-737-8879'
-                            value={this.state.phone}
-                            onChange={this.onChange} />
-                    </div>
+                            <input
+                                id='phone'
+                                name='phone'
+                                type='text'
+                                placeholder='717-737-8879'
+                                value={this.state.phone}
+                                onChange={this.onChange} />
+                        </div>
 
-                    <div>
-                        <label></label>
-                        <button
-                            onClick={this.onSubmit}
-                            className='submit'
-                            type='submit'>
-                            Submit
-                        </button>
-                    </div>
-                </fieldset>
-            </form>
+                        <div>
+                            <label></label>
+                            <button
+                                onClick={this.onSubmit}
+                                className='submit'
+                                type='submit'>
+                                Submit
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
+            </div>
         );
     }
 
@@ -119,7 +125,9 @@ export default class AddStore extends React.Component {
         e.preventDefault();
 
         if (!(this.state.store)) {
-            alert('Name cannot be blank');
+            this.setState({
+                errors: ['store']
+            });
         } else {
             // TODO: Clear state when submitted.
             axios.post(STORES_URL, this.state)
@@ -130,7 +138,8 @@ export default class AddStore extends React.Component {
                     city: '',
                     state: '',
                     zip: '',
-                    phone: ''
+                    phone: '',
+                    errors: []
                 })
             )
             .catch(() => console.log('error'));
