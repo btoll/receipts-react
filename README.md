@@ -8,8 +8,7 @@ TODO:
 
 - Redux
 - Forms:
-    + Validation
-    + Clearing after successful submission
+    + More robust validation
     + Disable Submit button
     + Canceling
     + Errors

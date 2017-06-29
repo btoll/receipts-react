@@ -1,20 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import { PRODUCTS_URL, incr } from '../config';
 
-const ListItem = props =>
+const ListItem = ({
+    item,
+    products,
+    onChange,
+    onRemove
+}) =>
     (
-        <div>
+        <li>
             <label htmlFor='productId'>Item:
                 <select
                     name='productId'
-                    value={props.item.productId}
-                    onChange={props.onChange}
+                    value={item.productId}
+                    onChange={onChange}
                 >
                     <option>Select Product</option>
                     {
-                        props.products.map((item, index) =>
+                        products.map(item =>
                             // These IDs care coming from the db so they are safe to use.
                             <option
                                 key={item.id}
@@ -29,8 +32,8 @@ const ListItem = props =>
                 <input
                     name='cost'
                     type='text'
-                    value={props.item.cost}
-                    onChange={props.onChange}
+                    value={item.cost}
+                    onChange={onChange}
                     />
             </label>
 
@@ -38,124 +41,45 @@ const ListItem = props =>
                 <input
                     name='quantity'
                     type='text'
-                    value={props.item.quantity}
-                    onChange={props.onChange}
+                    value={item.quantity}
+                    onChange={onChange}
                 />
             </label>
 
             <label>
-                <button onClick={props.onRemove}>-</button>
+                <button onClick={onRemove}>-</button>
             </label>
-        </div>
+        </li>
     );
 
 ListItem.propTypes = {
     item: PropTypes.object.isRequired,
+    products: PropTypes.array.isRequired,
     onChange: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    products: PropTypes.array.isRequired
+    onRemove: PropTypes.func.isRequired
 };
 
-export default class ListItems extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            items: [],
-            products: []
-        };
-
-        this.onAdd = this.onAdd.bind(this);
-        this.onChange = this.onChange.bind(this);
-        this.onRemove = this.onRemove.bind(this);
-    }
-
-    render() {
-        return (
-            <div id='items'>
-                <h3>Items</h3>
-                <button onClick={this.onAdd}>+</button>
-
-                {
-                    this.state.items.map((item, i) =>
-                        <ListItem
-                            key={i}
-                            item={item}
-                            products={this.state.products}
-                            onChange={this.onChange.bind(this, item)}
-                            onRemove={this.onRemove.bind(this, item)} />
-                    )
-                }
-            </div>
-        );
-    }
-
-    componentDidMount() {
-        axios.get(PRODUCTS_URL)
-        .then(results =>
-            this.setState({
-                products: results.data
-            })
-        )
-        .catch(console.log);
-    }
-
-    onAdd(e) {
-        e.preventDefault();
-
-        const items = [
-            ...this.state.items,
+const ListItems = ({
+    items,
+    products,
+    onListItemChange,
+    onListItemRemove
+}) =>
+    (
+        <ul>
             {
-                id: incr(),
-                productId: 0,
-                cost: 0,
-                quantity: 0
+                items.map((item, i) =>
+                    <ListItem
+                        key={i}
+                        item={item}
+                        products={products}
+                        onChange={onListItemChange.bind(null, item)}
+                        onRemove={onListItemRemove.bind(null, item)}
+                    />
+                )
             }
-        ]
+        </ul>
+    );
 
-        this.setState({
-            items: items
-        });
-
-        this.props.onListItemsChange(items);
-    }
-
-    onChange(item, e) {
-        const target = e.target;
-
-        const items = this.state.items.map(it => {
-            if (it.id === item.id) {
-                return Object.assign({}, it, {
-                    [target.name]: target.value
-                });
-            }
-
-            return it;
-        });
-
-        this.setState({
-            items: items
-        });
-
-        this.props.onListItemsChange(items);
-    }
-
-    onRemove(item, e) {
-        e.preventDefault();
-
-        const items = this.state.items.filter(
-            it => it.id !== item.id
-        );
-
-        this.setState({
-            items: items
-        });
-
-        this.props.onListItemsChange(items);
-    }
-}
-
-ListItems.propTypes = {
-    onListItemsChange: PropTypes.func.isRequired
-};
+export default ListItems;
 

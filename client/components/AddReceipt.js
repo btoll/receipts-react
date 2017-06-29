@@ -1,7 +1,12 @@
 import React from 'react';
 import ListItems from './ListItems';
 import axios from 'axios';
-import { RECEIPTS_URL, STORES_URL } from '../config';
+import {
+    PRODUCTS_URL,
+    RECEIPTS_URL,
+    STORES_URL,
+    incr
+} from '../config';
 
 export default class AddReceipt extends React.Component {
     constructor() {
@@ -9,14 +14,19 @@ export default class AddReceipt extends React.Component {
 
         this.state = {
             storeId: '',
-            items: [],
             totalCost: 0.00,
             purchaseDate: '',
+            items: [],
+
+            // The following shouldn't be in state b/c they won't change in the form, but ???
+            products: [],
             stores: []
         };
 
+        this.onAdd = this.onAdd.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.onListItemsChange = this.onListItemsChange.bind(this);
+        this.onListItemChange = this.onListItemChange.bind(this);
+        this.onListItemRemove = this.onListItemRemove.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -43,7 +53,17 @@ export default class AddReceipt extends React.Component {
                         </select>
                     </div>
 
-                    <ListItems onListItemsChange={this.onListItemsChange} />
+                    <div id='items'>
+                        <h3>Items</h3>
+                        <button onClick={this.onAdd}>+</button>
+
+                        <ListItems
+                            items={this.state.items}
+                            products={this.state.products}
+                            onListItemChange={this.onListItemChange}
+                            onListItemRemove={this.onListItemRemove}
+                        />
+                    </div>
 
                     <div>
                         <label htmlFor='totalCost'>Total Cost:</label>
@@ -81,14 +101,35 @@ export default class AddReceipt extends React.Component {
     }
 
     componentDidMount() {
-        axios.get(STORES_URL)
-        .then(results => {
-            // TODO: stores shouldn't be in state!
+        axios.all([
+            axios.get(STORES_URL),
+            axios.get(PRODUCTS_URL)
+        ])
+        .then(axios.spread((stores, products) =>
             this.setState({
-                stores: results.data
+                stores: stores.data,
+                products: products.data
             })
-        })
+        ))
         .catch(console.log);
+    }
+
+    onAdd(e) {
+        e.preventDefault();
+
+        const items = [
+            ...this.state.items,
+            {
+                id: incr(),
+                productId: 0,
+                cost: 0,
+                quantity: 0
+            }
+        ]
+
+        this.setState({
+            items: items
+        });
     }
 
     onChange(e) {
@@ -99,9 +140,31 @@ export default class AddReceipt extends React.Component {
         });
     }
 
-    // TODO: Is this incredibly expensive? Is it re-rendering everything, including children, everytime?
-    // All loggers in render() methods are invoked...
-    onListItemsChange(items) {
+    onListItemChange(item, e) {
+        const target = e.target;
+
+        const items = this.state.items.map(it => {
+            if (it.id === item.id) {
+                return Object.assign({}, it, {
+                    [target.name]: target.value
+                });
+            }
+
+            return it;
+        });
+
+        this.setState({
+            items: items
+        });
+    }
+
+    onListItemRemove(item, e) {
+        e.preventDefault();
+
+        const items = this.state.items.filter(
+            it => it.id !== item.id
+        );
+
         this.setState({
             items: items
         });
@@ -114,10 +177,9 @@ export default class AddReceipt extends React.Component {
         .then(() => {
             this.setState({
                 storeId: '',
-                items: [],
                 totalCost: 0.00,
                 purchaseDate: '',
-                stores: []
+                items: []
             });
 
             this.onSubmitted = true;

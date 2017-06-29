@@ -38,8 +38,6 @@ ul.nav a.active {
 
 form {
     margin: 40px 0 0 40px;
-/*    margin: 40px auto 0;*/
-/*    width: 44%;*/
 }
 
 form fieldset {
@@ -52,10 +50,9 @@ form div {
 
 form div label {
     display: inline-block;
-    font-size: 12px;
+    font-size: 13px;
     margin-right: 10px;
-    text-align: right;
-    width: 150px;
+    width: 120px;
 }
 
 form div input {
@@ -68,7 +65,6 @@ form.add-receipt fieldset {
 
 form div#items {
     background: turquoise;
-    margin: 0;
     padding: 5px 5px 10px;
 }
 
@@ -77,13 +73,18 @@ form div#items h3 {
     margin: 0 5px 0 0;
 }
 
-form div#items div {
-    text-align: center;
+form div#items ul {
+    list-style-type: none;
+    margin: 5px;
+    padding: 0;
+}
+
+form div#items li {
+    margin: 5px 0 5px 20px;
 }
 
 form div#items label {
     display: inline;
-    margin-right: 10px;
 }
 
 form div#items input {
