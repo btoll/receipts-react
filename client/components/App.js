@@ -7,53 +7,23 @@ import AddStore from './AddStore';
 import AddProduct from './AddProduct';
 import Query from './Query';
 
-class Content extends React.Component {
-    render() {
-        let html = <div></div>;
+const App = () =>
+    (
+        <BrowserRouter>
+            <div>
+                <Nav />
 
-        switch (this.props.page) {
-            case 'add-receipt':
-                html = <AddReceipt content={this.props.content} />
-                break;
-        }
-
-        return (
-            <div className="content">
-                {html}
+                <Switch>
+                    <Route exact path='/' component={Home} />
+                    <Route path='/add-receipt' component={AddReceipt} />
+                    <Route path='/add-store' component={AddStore} />
+                    <Route path='/add-product' component={AddProduct} />
+                    <Route path='/query' component={Query} />
+                    <Route render={() => <p>404 Not Found</p>} />
+                </Switch>
             </div>
-        );
-    }
-}
-
-class App extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            page: '',
-            content: null
-        };
-    }
-
-    render() {
-        return (
-            <BrowserRouter>
-                <div>
-                    <Nav />
-
-                    <Switch>
-                        <Route exact path='/' component={Home} />
-                        <Route path='/add-receipt' component={AddReceipt} />
-                        <Route path='/add-store' component={AddStore} />
-                        <Route path='/add-product' component={AddProduct} />
-                        <Route path='/query' component={Query} />
-                        <Route render={() => <p>404 Not Found</p>} />
-                    </Switch>
-                </div>
-            </BrowserRouter>
-        );
-    }
-}
+        </BrowserRouter>
+    );
 
 export default App;
 

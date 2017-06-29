@@ -3,8 +3,8 @@ import axios from 'axios';
 import { STORES_URL } from '../config';
 
 export default class AddStore extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             store: '',

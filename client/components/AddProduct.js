@@ -3,8 +3,8 @@ import axios from 'axios';
 import { PRODUCTS_URL } from '../config';
 
 export default class AddProduct extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             product: '',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { PRODUCTS_URL, incr } from '../config';
 
@@ -47,6 +48,13 @@ const ListItem = props =>
             </label>
         </div>
     );
+
+ListItem.propTypes = {
+    item: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onRemove: PropTypes.func.isRequired,
+    products: PropTypes.array.isRequired
+};
 
 export default class ListItems extends React.Component {
     constructor(props) {
@@ -146,4 +154,8 @@ export default class ListItems extends React.Component {
         this.props.onListItemsChange(items);
     }
 }
+
+ListItems.propTypes = {
+    onListItemsChange: PropTypes.func.isRequired
+};
 

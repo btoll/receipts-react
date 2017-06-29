@@ -4,8 +4,8 @@ import axios from 'axios';
 import { RECEIPTS_URL, STORES_URL } from '../config';
 
 export default class AddReceipt extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
 
         this.state = {
             storeId: '',
