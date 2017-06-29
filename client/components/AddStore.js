@@ -2,9 +2,6 @@ import React from 'react';
 import axios from 'axios';
 import { STORES_URL } from '../config';
 
-// TODO: Change key values!
-// TODO: prop types!
-
 export default class AddStore extends React.Component {
     constructor(props) {
         super(props);

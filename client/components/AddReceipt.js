@@ -1,17 +1,14 @@
 import React from 'react';
 import ListItems from './ListItems';
 import axios from 'axios';
-import { STORES_URL } from '../config';
-
-// TODO: Change key values!
-// TODO: prop types!
+import { RECEIPTS_URL, STORES_URL } from '../config';
 
 export default class AddReceipt extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            list: '',
+            storeId: '',
             items: [],
             totalCost: 0.00,
             purchaseDate: '',
@@ -33,8 +30,8 @@ export default class AddReceipt extends React.Component {
                         <label htmlFor='stores'>Select Store:</label>
                         <select
                             id='stores'
-                            name="list"
-                            value={this.state.list}
+                            name='storeId'
+                            value={this.state.storeId}
                             onChange={this.onChange}
                         >
                             <option>Select Store</option>
@@ -111,8 +108,11 @@ export default class AddReceipt extends React.Component {
     }
 
     onSubmit(e) {
-        console.dir(this.state);
         e.preventDefault();
+
+        axios.post(RECEIPTS_URL, this.state)
+        .then(() => console.log('success'))
+        .catch(() => console.log('error'));
     }
 }
 

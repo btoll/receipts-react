@@ -1,18 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-// TODO: Change key values!
-
-const navItems = [
-    'Add Receipt',
-    'Add Store',
-    'Add Product',
-    'Query'
-];
-
-const replace = s =>
-    s.replace(/\s/g, '_');
-
 export default function Nav() {
     return (
         <ul className='nav'>
@@ -46,17 +34,6 @@ export default function Nav() {
                 </NavLink>
             </li>
         </ul>
-//         <ul>
-//             {
-//                 navItems.map(name =>
-//                     <li key={name}>
-//                         <NavLink activeClassName='active' to={'/' + replace(name)}>
-//                             foo
-//                         </NavLink>
-//                     </li>
-//                 )
-//             }
-//         </ul>
     );
 }
 

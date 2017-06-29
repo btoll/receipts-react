@@ -6,7 +6,14 @@ It is a work in progress, but I do use it for my farm receipts.
 
 TODO:
 
-- Add Redux
+- Redux
+- propTypes
+- Forms:
+    + Validation
+    + Clearing after successful submission
+    + Disable Submit button
+    + Canceling
+    + Errors
 
 ## Start the http server
 

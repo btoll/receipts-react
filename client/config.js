@@ -3,6 +3,7 @@ const host = 'localhost';
 const port = '3000';
 
 const PRODUCTS_URL = `${protocol}${host}:${port}/products`;
+const RECEIPTS_URL = `${protocol}${host}:${port}/receipts`;
 const STORES_URL =  `${protocol}${host}:${port}/stores`;
 
 function* incrementer() {
@@ -19,6 +20,7 @@ const incr = (i =>
 
 export {
     PRODUCTS_URL,
+    RECEIPTS_URL,
     STORES_URL,
     incr
 };

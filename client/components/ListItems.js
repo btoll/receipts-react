@@ -118,7 +118,7 @@ export default class ListItems extends React.Component {
         const items = this.state.items.map(it => {
             if (it.id === item.id) {
                 return Object.assign({}, it, {
-                    [target.name]: Number(target.value)
+                    [target.name]: target.value
                 });
             }
 
