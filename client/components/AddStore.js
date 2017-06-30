@@ -18,7 +18,9 @@ export default class AddStore extends React.Component {
             errors: []
         };
 
+        this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -98,13 +100,16 @@ export default class AddStore extends React.Component {
                         </div>
 
                         <div>
-                            <label></label>
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
                                 disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
+                            </button>
+
+                            <button onClick={this.onCancel}>
+                                Cancel
                             </button>
                         </div>
                     </fieldset>
@@ -115,11 +120,29 @@ export default class AddStore extends React.Component {
         );
     }
 
+    onCancel(e) {
+        e.preventDefault();
+        this.onReset();
+    }
+
     onChange(e) {
         const target = e.target;
 
         this.setState({
             [target.name]: target.value
+        });
+    }
+
+    onReset() {
+        this.setState({
+            store: '',
+            street: '',
+            city: '',
+            state: '',
+            zip: '',
+            phone: '',
+            errors: [],
+            disabled: false
         });
     }
 
@@ -137,18 +160,7 @@ export default class AddStore extends React.Component {
 
             // TODO: Clear state when submitted.
             axios.post(STORES_URL, this.state)
-            .then(() =>
-                this.setState({
-                    store: '',
-                    street: '',
-                    city: '',
-                    state: '',
-                    zip: '',
-                    phone: '',
-                    errors: [],
-                    disabled: false
-                })
-            )
+            .then(this.onReset)
             .catch(() => console.log('error'));
         }
     }

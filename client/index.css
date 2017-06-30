@@ -55,6 +55,10 @@ form div label {
     width: 120px;
 }
 
+form div button.submit {
+    margin: 0 5px 0 130px;
+}
+
 form div input {
     width: 85px;
 }

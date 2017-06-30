@@ -16,7 +16,9 @@ export default class AddProduct extends React.Component {
 
         this.exclude = new Set(['disabled', 'errors']);
 
+        this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -50,13 +52,16 @@ export default class AddProduct extends React.Component {
                         </div>
 
                         <div>
-                            <label></label>
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
                                 disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
+                            </button>
+
+                            <button onClick={this.onCancel}>
+                                Cancel
                             </button>
                         </div>
                     </fieldset>
@@ -67,11 +72,25 @@ export default class AddProduct extends React.Component {
         );
     }
 
+    onCancel(e) {
+        e.preventDefault();
+        this.onReset();
+    }
+
     onChange(e) {
         const target = e.target;
 
         this.setState({
             [target.name]: target.value
+        });
+    }
+
+    onReset() {
+        this.setState({
+            product: '',
+            brand: '',
+            errors: [],
+            disabled: false
         });
     }
 
@@ -88,14 +107,7 @@ export default class AddProduct extends React.Component {
             });
 
             axios.post(PRODUCTS_URL, this.state)
-            .then(() =>
-                this.setState({
-                    product: '',
-                    brand: '',
-                    errors: [],
-                    disabled: false
-                })
-            )
+            .then(this.onReset)
             .catch(() => console.log('error'));
         } else {
             this.setState({

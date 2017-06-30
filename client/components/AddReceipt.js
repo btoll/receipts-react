@@ -28,9 +28,11 @@ export default class AddReceipt extends React.Component {
         this.exclude = new Set(['disabled', 'errors', 'products', 'stores']);
 
         this.onAdd = this.onAdd.bind(this);
+        this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onListItemChange = this.onListItemChange.bind(this);
         this.onListItemRemove = this.onListItemRemove.bind(this);
+        this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
@@ -92,13 +94,16 @@ export default class AddReceipt extends React.Component {
                         </div>
 
                         <div>
-                            <label></label>
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
                                 disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
+                            </button>
+
+                            <button onClick={this.onCancel}>
+                                Cancel
                             </button>
                         </div>
                     </fieldset>
@@ -141,6 +146,11 @@ export default class AddReceipt extends React.Component {
         });
     }
 
+    onCancel(e) {
+        e.preventDefault();
+        this.onReset();
+    }
+
     onChange(e) {
         const target = e.target;
 
@@ -179,6 +189,17 @@ export default class AddReceipt extends React.Component {
         });
     }
 
+    onReset() {
+        this.setState({
+            storeId: '',
+            totalCost: 0.00,
+            purchaseDate: '',
+            items: [],
+            errors: [],
+            disabled: false
+        });
+    }
+
     onSubmit(e) {
         e.preventDefault();
 
@@ -192,16 +213,7 @@ export default class AddReceipt extends React.Component {
             });
 
             axios.post(RECEIPTS_URL, this.state)
-            .then(() => {
-                this.setState({
-                    storeId: '',
-                    totalCost: 0.00,
-                    purchaseDate: '',
-                    items: [],
-                    errors: [],
-                    disabled: false
-                });
-            })
+            .then(this.onReset)
             .catch(() => console.log('error'));
         } else {
             this.setState({
