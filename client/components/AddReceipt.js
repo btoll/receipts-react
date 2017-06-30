@@ -201,11 +201,22 @@ export default class AddReceipt extends React.Component {
     }
 
     onSubmit(e) {
+        // TODO: More robust validation!
         e.preventDefault();
 
         const errors = Object.keys(this.state)
             .filter(key => (!this.exclude.has(key)) && !this.state[key])
             .map(key => key);
+
+        const items = this.state.items.every(item => {
+            let res = true;
+
+            if (item.productId <= 0 || item.quantity <= 0) {
+                res = false;
+            }
+
+            return res;
+        });
 
         if (!errors.length) {
             this.setState({
@@ -217,7 +228,9 @@ export default class AddReceipt extends React.Component {
             .catch(() => console.log('error'));
         } else {
             this.setState({
-                errors: errors
+                errors: !items ?
+                    [...errors, 'One or more of the items is blank'] :
+                    errors;
             });
         }
     }

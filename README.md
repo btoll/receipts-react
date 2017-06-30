@@ -7,6 +7,8 @@ It is a work in progress, but I do use it for my farm receipts.
 TODO:
 
 - Redux
+- Better form validation for AddReceipt
+- Query page
 
 ## Start the http server
 
