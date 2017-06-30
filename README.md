@@ -8,8 +8,6 @@ TODO:
 
 - Redux
 - Forms:
-    + More robust validation
-    + Disable Submit button
     + Canceling
 
 ## Start the http server

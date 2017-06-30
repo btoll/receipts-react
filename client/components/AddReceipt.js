@@ -18,12 +18,14 @@ export default class AddReceipt extends React.Component {
             totalCost: 0.00,
             purchaseDate: '',
             items: [],
+            disabled: false,
             errors: [],
-
             // The following shouldn't be in state b/c they won't change in the form, but ???
             products: [],
             stores: []
         };
+
+        this.exclude = new Set(['disabled', 'errors', 'products', 'stores']);
 
         this.onAdd = this.onAdd.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -94,6 +96,7 @@ export default class AddReceipt extends React.Component {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
+                                disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -179,18 +182,32 @@ export default class AddReceipt extends React.Component {
     onSubmit(e) {
         e.preventDefault();
 
-        // TODO: Add validation.
-        axios.post(RECEIPTS_URL, this.state)
-        .then(() => {
+        const errors = Object.keys(this.state)
+            .filter(key => (!this.exclude.has(key)) && !this.state[key])
+            .map(key => key);
+
+        if (!errors.length) {
             this.setState({
-                storeId: '',
-                totalCost: 0.00,
-                purchaseDate: '',
-                items: [],
-                errors: []
+                disabled: true
             });
-        })
-        .catch(() => console.log('error'));
+
+            axios.post(RECEIPTS_URL, this.state)
+            .then(() => {
+                this.setState({
+                    storeId: '',
+                    totalCost: 0.00,
+                    purchaseDate: '',
+                    items: [],
+                    errors: [],
+                    disabled: false
+                });
+            })
+            .catch(() => console.log('error'));
+        } else {
+            this.setState({
+                errors: errors
+            });
+        }
     }
 }
 

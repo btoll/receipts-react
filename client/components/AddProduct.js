@@ -10,8 +10,11 @@ export default class AddProduct extends React.Component {
         this.state = {
             product: '',
             brand: '',
+            disabled: false,
             errors: []
         };
+
+        this.exclude = new Set(['disabled', 'errors']);
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -51,6 +54,7 @@ export default class AddProduct extends React.Component {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
+                                disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -75,16 +79,21 @@ export default class AddProduct extends React.Component {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
-            .filter(key => key !== 'errors' && !this.state[key])
+            .filter(key => (!this.exclude.has(key)) && !this.state[key])
             .map(key => key);
 
         if (!errors.length) {
+            this.setState({
+                disabled: true
+            });
+
             axios.post(PRODUCTS_URL, this.state)
             .then(() =>
                 this.setState({
                     product: '',
                     brand: '',
-                    errors: []
+                    errors: [],
+                    disabled: false
                 })
             )
             .catch(() => console.log('error'));

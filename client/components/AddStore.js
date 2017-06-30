@@ -14,6 +14,7 @@ export default class AddStore extends React.Component {
             state: '',
             zip: '',
             phone: '',
+            disabled: false,
             errors: []
         };
 
@@ -101,6 +102,7 @@ export default class AddStore extends React.Component {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
+                                disabled={this.state.disabled ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -129,6 +131,10 @@ export default class AddStore extends React.Component {
                 errors: ['store']
             });
         } else {
+            this.setState({
+                disabled: true
+            });
+
             // TODO: Clear state when submitted.
             axios.post(STORES_URL, this.state)
             .then(() =>
@@ -139,7 +145,8 @@ export default class AddStore extends React.Component {
                     state: '',
                     zip: '',
                     phone: '',
-                    errors: []
+                    errors: [],
+                    disabled: false
                 })
             )
             .catch(() => console.log('error'));
