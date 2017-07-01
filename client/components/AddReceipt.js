@@ -225,12 +225,23 @@ export default class AddReceipt extends React.Component {
 
             axios.post(RECEIPTS_URL, this.state)
             .then(this.onReset)
-            .catch(() => console.log('error'));
+            .catch(err => {
+                const msg = err.message;
+
+                this.setState({
+                    disabled: false,
+                    errors: [
+                        msg === 'Network Error' ?
+                            `${msg} - Are you offline?` :
+                            `${msg} - Make sure your data types match!`
+                    ]
+                });
+            });
         } else {
             this.setState({
                 errors: !items ?
                     [...errors, 'One or more of the items is blank'] :
-                    errors;
+                    errors
             });
         }
     }

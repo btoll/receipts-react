@@ -1,16 +1,12 @@
 const mysql = require(process.env.RECEIPTS_DB);
 
 const routeFn = route =>
-    (req, res) =>
+    (req, res, next) =>
         mysql.query(route, req)
         .then(({results}) => {
-//             console.log(results);
             res.send(results);
         })
-        .catch(err => {
-            console.log(err);
-            res.send('Error 500');
-        });
+        .catch(next);
 
 module.exports = app => {
     app.get('/products', routeFn('products'));
