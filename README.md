@@ -16,6 +16,12 @@ TODO:
 RECEIPTS_DB=/path/to/config node ./server/app.js
 ```
 
+## Screenshots
+
+Check out the pro design.
+
+![ScreenShot](https://raw.github.com/btoll/i/master/receipts-react/receipts-react.png)
+
 ## License
 
 [GPLv3](COPYING)
