@@ -1,15 +1,15 @@
 import React from 'react';
 import Error from './Error';
 import axios from 'axios';
-import { PRODUCTS_URL } from '../config';
+import { LOGIN_URL } from '../config';
 
-export default class AddProduct extends React.Component {
-    constructor() {
+export default class Login extends React.Component {
+    constructor(props) {
         super();
 
         this.state = {
-            product: '',
-            brand: '',
+            username: '',
+            password: '',
             disabled: false,
             errors: []
         };
@@ -19,36 +19,36 @@ export default class AddProduct extends React.Component {
         this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onReset = this.onReset.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+        this.onSubmit = this.onSubmit.bind(this, props);
     }
 
     render() {
         return (
             <div>
-                <form className='add-product' onSubmit={this.onSubmit}>
+                <form className='login' onSubmit={this.onSubmit}>
                     <fieldset>
-                        <legend>Add Product</legend>
+                        <legend>Login</legend>
 
                         <div>
-                            <label htmlFor='product'>Product:</label>
+                            <label htmlFor='product'>Username:</label>
 
                             <input
                                 autoFocus
-                                id='product'
-                                name='product'
+                                id='username'
+                                name='username'
                                 type='text'
-                                value={this.state.product}
+                                value={this.state.username}
                                 onChange={this.onChange} />
                         </div>
 
                         <div>
-                            <label htmlFor='brand'>Brand:</label>
+                            <label htmlFor='brand'>Password:</label>
 
                             <input
-                                id='brand'
-                                name='brand'
-                                type='text'
-                                value={this.state.brand}
+                                id='password'
+                                name='password'
+                                type='password'
+                                value={this.state.password}
                                 onChange={this.onChange} />
                         </div>
 
@@ -88,14 +88,14 @@ export default class AddProduct extends React.Component {
 
     onReset() {
         this.setState({
-            product: '',
-            brand: '',
+            username: '',
+            password: '',
             errors: [],
             disabled: false
         });
     }
 
-    onSubmit(e) {
+    onSubmit(props, e) {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
@@ -107,8 +107,11 @@ export default class AddProduct extends React.Component {
                 disabled: true
             });
 
-            axios.post(PRODUCTS_URL, this.state)
-            .then(this.onReset)
+            axios.post(LOGIN_URL, this.state)
+            .then(data => (
+                this.onReset(),
+                props.onLogIn(data.data[0])
+            ))
             .catch(() => console.log('error'));
         } else {
             this.setState({

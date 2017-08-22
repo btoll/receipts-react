@@ -46,6 +46,7 @@ export default class AddReceipt extends React.Component {
                         <div>
                             <label htmlFor='stores'>Select Store:</label>
                             <select
+                                autoFocus
                                 id='stores'
                                 name='storeId'
                                 value={this.state.storeId}

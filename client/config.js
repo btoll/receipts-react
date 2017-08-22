@@ -2,6 +2,7 @@ const protocol = 'http://';
 const host = 'localhost';
 const port = '3000';
 
+const LOGIN_URL = `${protocol}${host}:${port}/login`;
 const PRODUCTS_URL = `${protocol}${host}:${port}/products`;
 const RECEIPTS_URL = `${protocol}${host}:${port}/receipts`;
 const STORES_URL =  `${protocol}${host}:${port}/stores`;
@@ -19,6 +20,7 @@ const incr = (i =>
 )(incrementer());
 
 export {
+    LOGIN_URL,
     PRODUCTS_URL,
     RECEIPTS_URL,
     STORES_URL,

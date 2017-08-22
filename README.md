@@ -13,7 +13,7 @@ TODO:
 ## Start the http server
 
 ```
-RECEIPTS_DB=/path/to/config node ./server/app.js
+RECEIPTS_DB=/path/to/receipts_db.js node ./server/app.js
 ```
 
 ## Screenshots

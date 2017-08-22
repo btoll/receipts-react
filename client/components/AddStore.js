@@ -35,6 +35,7 @@ export default class AddStore extends React.Component {
                             <label htmlFor='store'>Name:</label>
 
                             <input
+                                autoFocus
                                 id='store'
                                 name='store'
                                 type='text'

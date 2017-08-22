@@ -9,6 +9,8 @@ const routeFn = route =>
         .catch(next);
 
 module.exports = app => {
+    app.post('/login', routeFn('login'));
+
     app.get('/products', routeFn('products'));
     app.post('/products', routeFn('products'));
 
