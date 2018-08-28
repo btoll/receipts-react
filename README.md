@@ -1,6 +1,6 @@
 # receipts-react
 
-This web application was ported from a program originally written in C and can be found [here][1].
+This web application was ported from a program originally [written in C].
 
 It is a work in progress, but I do use it for my farm receipts.
 
@@ -10,10 +10,10 @@ TODO:
 - Better form validation for AddReceipt
 - Query page
 
-## Start the http server
+## Start the servers
 
 ```
-RECEIPTS_DB=/path/to/receipts_db.js node ./server/app.js
+RECEIPTS_DB=/path/to/receipts_db.js ./scripts/start.sh
 ```
 
 ## Screenshots
@@ -30,5 +30,5 @@ Check out the pro design.
 
 Benjamin Toll
 
-[1]: https://github.com/btoll/receipts
+[written in C]: https://github.com/btoll/receipts
 
