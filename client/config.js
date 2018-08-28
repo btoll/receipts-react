@@ -3,10 +3,10 @@ const host = 'localhost';
 const port = '3000';
 
 const SOCKET = `${protocol}${host}:${port}`;
-const LOGIN_URL = `${socket}/login`;
-const PRODUCTS_URL = `${socket}/products`;
-const RECEIPTS_URL = `${socket}/receipts`;
-const STORES_URL =  `${socket}/stores`;
+const LOGIN_URL = `${SOCKET}/login`;
+const PRODUCTS_URL = `${SOCKET}/products`;
+const RECEIPTS_URL = `${SOCKET}/receipts`;
+const STORES_URL =  `${SOCKET}/stores`;
 
 function* incrementer() {
     let n = 100;
