@@ -2,10 +2,11 @@ const protocol = 'http://';
 const host = 'localhost';
 const port = '3000';
 
-const LOGIN_URL = `${protocol}${host}:${port}/login`;
-const PRODUCTS_URL = `${protocol}${host}:${port}/products`;
-const RECEIPTS_URL = `${protocol}${host}:${port}/receipts`;
-const STORES_URL =  `${protocol}${host}:${port}/stores`;
+const SOCKET = `${protocol}${host}:${port}`;
+const LOGIN_URL = `${socket}/login`;
+const PRODUCTS_URL = `${socket}/products`;
+const RECEIPTS_URL = `${socket}/receipts`;
+const STORES_URL =  `${socket}/stores`;
 
 function* incrementer() {
     let n = 100;
