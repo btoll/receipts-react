@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     // `babel-polyfill` is needed for the generator in config.js and MUST be first in the array!
-    entry: ['babel-polyfill', './client/index.js'],
+    entry: ['@babel/polyfill', './client/index.js'],
 
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -13,9 +13,19 @@ module.exports = {
     },
 
     module: {
-        rules: [
-            { test: /\.(js)$/, use: 'babel-loader' },
-            { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+        loaders: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader'
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
+            }
         ]
     },
 

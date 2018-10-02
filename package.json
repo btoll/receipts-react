@@ -1,40 +1,39 @@
 {
   "name": "receipts-react",
   "version": "0.1.0",
-  "description": "",
+  "description": "Track farm expenses",
   "main": "./client/index.js",
-  "babel": {
-    "presets": [
-      "env",
-      "react"
-    ]
-  },
-  "keywords": [],
+  "keywords": [
+      "receipts",
+      "expenses",
+      "farm"
+  ],
   "author": "Benjamin Toll <benjam72@yahoo.com> (http://www.benjamintoll.com)",
   "license": "GPLv3",
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
-    "cors": "^2.8.3",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "mysql": "^2.16.0",
     "npx": "^10.2.0",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-router-dom": "^4.1.1"
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.0.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.4",
-    "html-webpack-plugin": "^2.28.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^0.28.11",
+    "html-webpack-plugin": "^2.30.1",
     "style-loader": "^0.18.2",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.5"
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.11.3"
   }
 }
