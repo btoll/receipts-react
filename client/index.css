@@ -44,6 +44,10 @@ form fieldset {
     width: 35%;
 }
 
+form legend {
+    font-weight: bold;
+}
+
 form div {
     margin: 10px;
 }
@@ -60,7 +64,7 @@ form div button.submit {
 }
 
 form div input {
-    width: 85px;
+    width: 130px;
 }
 
 form.add-receipt fieldset {
@@ -69,6 +73,7 @@ form.add-receipt fieldset {
 
 form div#items {
     background: turquoise;
+    border-radius: 5px;
     padding: 5px 5px 10px;
 }
 

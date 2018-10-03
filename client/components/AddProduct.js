@@ -7,12 +7,10 @@ import { PRODUCTS_URL } from '../config';
 type State = {
     product: string,
     brand: string,
-    disabled: boolean,
     errors: Array<string>
 };
 
 export default class AddProduct extends React.Component<{}, State> {
-    exclude: Set<string>;
     onCancel: Function;
     onChange: Function;
     onReset: Function;
@@ -24,11 +22,8 @@ export default class AddProduct extends React.Component<{}, State> {
         this.state = {
             product: '',
             brand: '',
-            disabled: false,
             errors: []
         };
-
-        this.exclude = new Set(['disabled', 'errors']);
 
         this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -38,7 +33,7 @@ export default class AddProduct extends React.Component<{}, State> {
 
     render() {
         return (
-            <div>
+            <>
                 <form className='add-product' onSubmit={this.onSubmit}>
                     <fieldset>
                         <legend>Add Product</legend>
@@ -70,7 +65,7 @@ export default class AddProduct extends React.Component<{}, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.disabled ? 'disabled' : ''}
+                                disabled={this.state.brand === '' || this.state.product === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -83,7 +78,7 @@ export default class AddProduct extends React.Component<{}, State> {
                 </form>
 
                 { !!this.state.errors.length && <Error fields={this.state.errors} /> }
-            </div>
+            </>
         );
     }
 
@@ -104,8 +99,7 @@ export default class AddProduct extends React.Component<{}, State> {
         this.setState({
             product: '',
             brand: '',
-            errors: [],
-            disabled: false
+            errors: []
         });
     }
 
@@ -113,14 +107,9 @@ export default class AddProduct extends React.Component<{}, State> {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
-            .filter(key => (!this.exclude.has(key)) && !this.state[key])
-            .map(key => key);
+            .filter(key => !['errors'].includes(key) && !this.state[key]);
 
         if (!errors.length) {
-            this.setState({
-                disabled: true
-            });
-
             axios.post(PRODUCTS_URL, this.state)
             .then(this.onReset)
             .catch(() => console.log('error'));

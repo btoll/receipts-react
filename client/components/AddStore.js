@@ -11,7 +11,6 @@ type State = {
     state: string,
     zip: string,
     phone: string,
-    disabled: boolean,
     errors: Array<string>
 };
 
@@ -31,7 +30,6 @@ export default class AddStore extends React.Component<{}, State> {
             state: '',
             zip: '',
             phone: '',
-            disabled: false,
             errors: []
         };
 
@@ -43,7 +41,7 @@ export default class AddStore extends React.Component<{}, State> {
 
     render() {
         return (
-            <div>
+            <>
                 <form className='add-store' onSubmit={this.onSubmit}>
                     <fieldset>
                         <legend>Add Store</legend>
@@ -121,7 +119,7 @@ export default class AddStore extends React.Component<{}, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.disabled ? 'disabled' : ''}
+                                disabled={this.state.store === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -134,7 +132,7 @@ export default class AddStore extends React.Component<{}, State> {
                 </form>
 
                 { !!this.state.errors.length && <Error fields={this.state.errors} /> }
-            </div>
+            </>
         );
     }
 
@@ -159,8 +157,7 @@ export default class AddStore extends React.Component<{}, State> {
             state: '',
             zip: '',
             phone: '',
-            errors: [],
-            disabled: false
+            errors: []
         });
     }
 
@@ -172,10 +169,6 @@ export default class AddStore extends React.Component<{}, State> {
                 errors: ['store']
             });
         } else {
-            this.setState({
-                disabled: true
-            });
-
             // TODO: Clear state when submitted.
             axios.post(STORES_URL, this.state)
             .then(this.onReset)

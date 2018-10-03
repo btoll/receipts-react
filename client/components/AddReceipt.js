@@ -15,14 +15,12 @@ type State = {
     totalCost: number,
     purchaseDate: string,
     items: Array<any>,
-    disabled: boolean,
     errors: Array<any>,
     products: Array<any>,
     stores: Array<any>
 };
 
 export default class AddReceipt extends React.Component<{}, State> {
-    exclude: Set<string>;
     onAdd: Function;
     onCancel: Function;
     onChange: Function;
@@ -39,14 +37,11 @@ export default class AddReceipt extends React.Component<{}, State> {
             totalCost: 0.00,
             purchaseDate: '',
             items: [],
-            disabled: false,
             errors: [],
             // The following shouldn't be in state b/c they won't change in the form, but ???
             products: [],
             stores: []
         };
-
-        this.exclude = new Set(['disabled', 'errors', 'products', 'stores']);
 
         this.onAdd = this.onAdd.bind(this);
         this.onCancel = this.onCancel.bind(this);
@@ -59,7 +54,7 @@ export default class AddReceipt extends React.Component<{}, State> {
 
     render() {
         return (
-            <div>
+            <>
                 <form className='add-receipt' onSubmit={this.onSubmit}>
                     <fieldset>
                         <legend>Add Receipt</legend>
@@ -119,7 +114,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.disabled ? 'disabled' : ''}
+                                disabled={this.state.purchaseDate === '' || this.state.storeId === '' || this.state.totalCost === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -132,7 +127,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                 </form>
 
                 { !!this.state.errors.length && <Error fields={this.state.errors} /> }
-            </div>
+            </>
         );
     }
 
@@ -219,8 +214,7 @@ export default class AddReceipt extends React.Component<{}, State> {
             totalCost: 0.00,
             purchaseDate: '',
             items: [],
-            errors: [],
-            disabled: false
+            errors: []
         });
     }
 
@@ -229,8 +223,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
-            .filter(key => (!this.exclude.has(key)) && !this.state[key])
-            .map(key => key);
+            .filter(key => !['errors', 'products', 'stores'].includes(key) && !this.state[key]);
 
         const items = this.state.items.every(item => {
             let res = true;
@@ -243,17 +236,12 @@ export default class AddReceipt extends React.Component<{}, State> {
         });
 
         if (!errors.length) {
-            this.setState({
-                disabled: true
-            });
-
             axios.post(RECEIPTS_URL, this.state)
             .then(this.onReset)
             .catch(err => {
                 const msg = err.message;
 
                 this.setState({
-                    disabled: false,
                     errors: [
                         msg === 'Network Error' ?
                             `${msg} - Are you offline?` :

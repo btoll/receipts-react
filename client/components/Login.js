@@ -11,12 +11,10 @@ type Props = {
 type State = {
     username: string,
     password: string,
-    disabled: boolean,
     errors: Array<string>
 };
 
 export default class Login extends React.Component<Props, State> {
-    exclude: Set<string>;
     onCancel: Function;
     onChange: Function;
     onReset: Function;
@@ -28,11 +26,8 @@ export default class Login extends React.Component<Props, State> {
         this.state = {
             username: '',
             password: '',
-            disabled: false,
             errors: []
         };
-
-        this.exclude = new Set(['disabled', 'errors']);
 
         this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -74,7 +69,7 @@ export default class Login extends React.Component<Props, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.disabled ? 'disabled' : ''}
+                                disabled={this.state.username === '' || this.state.password === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -108,8 +103,7 @@ export default class Login extends React.Component<Props, State> {
         this.setState({
             username: '',
             password: '',
-            errors: [],
-            disabled: false
+            errors: []
         });
     }
 
@@ -117,14 +111,9 @@ export default class Login extends React.Component<Props, State> {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
-            .filter(key => (!this.exclude.has(key)) && !this.state[key])
-            .map(key => key);
+            .filter(key => !['errors'].includes(key) && !this.state[key]);
 
         if (!errors.length) {
-            this.setState({
-                disabled: true
-            });
-
             axios.post(LOGIN_URL, this.state)
             .then(data => (
                 this.onReset(),
