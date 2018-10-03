@@ -1,9 +1,26 @@
+// @flow
 import React from 'react';
 import Error from './Error';
 import axios from 'axios';
 import { STORES_URL } from '../config';
 
-export default class AddStore extends React.Component {
+type State = {
+    store: string,
+    street: string,
+    city: string,
+    state: string,
+    zip: string,
+    phone: string,
+    disabled: boolean,
+    errors: Array<string>
+};
+
+export default class AddStore extends React.Component<{}, State> {
+    onCancel: Function;
+    onChange: Function;
+    onReset: Function;
+    onSubmit: Function;
+
     constructor() {
         super();
 
@@ -121,12 +138,12 @@ export default class AddStore extends React.Component {
         );
     }
 
-    onCancel(e) {
+    onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         this.onReset();
     }
 
-    onChange(e) {
+    onChange(e: SyntheticInputEvent<HTMLInputElement>) {
         const target = e.target;
 
         this.setState({
@@ -147,7 +164,7 @@ export default class AddStore extends React.Component {
         });
     }
 
-    onSubmit(e) {
+    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
         if (!(this.state.store)) {

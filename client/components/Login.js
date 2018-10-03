@@ -1,11 +1,29 @@
+// @flow
 import React from 'react';
 import Error from './Error';
 import axios from 'axios';
 import { LOGIN_URL } from '../config';
 
-export default class Login extends React.Component {
-    constructor(props) {
-        super();
+type Props = {
+    onLogIn: Function;
+};
+
+type State = {
+    username: string,
+    password: string,
+    disabled: boolean,
+    errors: Array<string>
+};
+
+export default class Login extends React.Component<Props, State> {
+    exclude: Set<string>;
+    onCancel: Function;
+    onChange: Function;
+    onReset: Function;
+    onSubmit: Function;
+
+    constructor(props: Props) {
+        super(props);
 
         this.state = {
             username: '',
@@ -19,7 +37,7 @@ export default class Login extends React.Component {
         this.onCancel = this.onCancel.bind(this);
         this.onChange = this.onChange.bind(this);
         this.onReset = this.onReset.bind(this);
-        this.onSubmit = this.onSubmit.bind(this, props);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     render() {
@@ -73,12 +91,12 @@ export default class Login extends React.Component {
         );
     }
 
-    onCancel(e) {
+    onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         this.onReset();
     }
 
-    onChange(e) {
+    onChange(e: SyntheticInputEvent<HTMLInputElement>) {
         const target = e.target;
 
         this.setState({
@@ -95,7 +113,7 @@ export default class Login extends React.Component {
         });
     }
 
-    onSubmit(props, e) {
+    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
@@ -110,7 +128,7 @@ export default class Login extends React.Component {
             axios.post(LOGIN_URL, this.state)
             .then(data => (
                 this.onReset(),
-                props.onLogIn(data.data[0])
+                this.props.onLogIn(data.data[0])
             ))
             .catch(() => console.log('error'));
         } else {

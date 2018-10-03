@@ -4,12 +4,15 @@
   "description": "Track farm expenses",
   "main": "./client/index.js",
   "keywords": [
-      "receipts",
-      "expenses",
-      "farm"
+    "receipts",
+    "expenses",
+    "farm"
   ],
   "author": "Benjamin Toll <benjam72@yahoo.com> (http://www.benjamintoll.com)",
   "license": "GPLv3",
+  "scripts": {
+    "flow": "flow"
+  },
   "dependencies": {
     "axios": "^0.16.2",
     "body-parser": "^1.18.3",
@@ -28,9 +31,13 @@
     "@babel/core": "^7.1.2",
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.1.0",
+    "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^0.28.11",
+    "flow-bin": "^0.82.0",
+    "flow-typed": "^2.5.1",
     "html-webpack-plugin": "^2.30.1",
     "style-loader": "^0.18.2",
     "webpack": "^2.7.0",

@@ -1,7 +1,14 @@
+// @flow
 import React from 'react';
 import Login from './Login';
 
-export default class Home extends React.Component {
+type State = {
+    username: string
+};
+
+export default class Home extends React.Component<{}, State> {
+    onLogIn: Function;
+
     constructor() {
         super();
 
@@ -18,7 +25,7 @@ export default class Home extends React.Component {
             <div>Welcome {this.state.username}!</div>;
     }
 
-    onLogIn(user) {
+    onLogIn(user: { username: string }) {
         this.setState({
             username: user.username
         });

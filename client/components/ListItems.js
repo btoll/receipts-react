@@ -1,12 +1,26 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
+
+type Single = {
+    item: { cost: number, productId: string, quantity: number },
+    products: Array<{ id: string, brand: string, product: string }>,
+    onChange: Function,
+    onRemove: Function
+};
+
+type Many = {
+    items: Array<{ cost: number, productId: string, quantity: number }>,
+    products: Array<{ id: string, brand: string, product: string }>,
+    onListItemChange: Function,
+    onListItemRemove: Function
+};
 
 const ListItem = ({
     item,
     products,
     onChange,
     onRemove
-}) =>
+}: Single) =>
     (
         <li>
             <label htmlFor='productId'>Item:
@@ -52,19 +66,12 @@ const ListItem = ({
         </li>
     );
 
-ListItem.propTypes = {
-    item: PropTypes.object.isRequired,
-    products: PropTypes.array.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired
-};
-
 const ListItems = ({
     items,
     products,
     onListItemChange,
     onListItemRemove
-}) =>
+}: Many) =>
     (
         <ul>
             {

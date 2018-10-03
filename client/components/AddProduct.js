@@ -1,9 +1,23 @@
+// @flow
 import React from 'react';
 import Error from './Error';
 import axios from 'axios';
 import { PRODUCTS_URL } from '../config';
 
-export default class AddProduct extends React.Component {
+type State = {
+    product: string,
+    brand: string,
+    disabled: boolean,
+    errors: Array<string>
+};
+
+export default class AddProduct extends React.Component<{}, State> {
+    exclude: Set<string>;
+    onCancel: Function;
+    onChange: Function;
+    onReset: Function;
+    onSubmit: Function;
+
     constructor() {
         super();
 
@@ -73,12 +87,12 @@ export default class AddProduct extends React.Component {
         );
     }
 
-    onCancel(e) {
+    onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         this.onReset();
     }
 
-    onChange(e) {
+    onChange(e: SyntheticInputEvent<HTMLInputElement>) {
         const target = e.target;
 
         this.setState({
@@ -95,7 +109,7 @@ export default class AddProduct extends React.Component {
         });
     }
 
-    onSubmit(e) {
+    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const errors = Object.keys(this.state)

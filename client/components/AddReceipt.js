@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import Error from './Error';
 import ListItems from './ListItems';
@@ -9,7 +10,27 @@ import {
     incr
 } from '../config';
 
-export default class AddReceipt extends React.Component {
+type State = {
+    storeId: string,
+    totalCost: number,
+    purchaseDate: string,
+    items: Array<any>,
+    disabled: boolean,
+    errors: Array<any>,
+    products: Array<any>,
+    stores: Array<any>
+};
+
+export default class AddReceipt extends React.Component<{}, State> {
+    exclude: Set<string>;
+    onAdd: Function;
+    onCancel: Function;
+    onChange: Function;
+    onListItemChange: Function;
+    onListItemRemove: Function;
+    onReset: Function;
+    onSubmit: Function;
+
     constructor() {
         super();
 
@@ -129,7 +150,7 @@ export default class AddReceipt extends React.Component {
         .catch(console.log);
     }
 
-    onAdd(e) {
+    onAdd(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
 
         const items = [
@@ -147,26 +168,28 @@ export default class AddReceipt extends React.Component {
         });
     }
 
-    onCancel(e) {
+    onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
         this.onReset();
     }
 
-    onChange(e) {
-        const target = e.target;
+    onChange(e: SyntheticEvent<>) {
+        const currentTarget = e.currentTarget;
 
         this.setState({
-            [target.name]: target.value
+            // https://github.com/facebook/flow/issues/2099#issuecomment-272372086
+            [(currentTarget: window.HTMLInputElement).name]: (currentTarget: window.HTMLInputElement).value
         });
     }
 
-    onListItemChange(item, e) {
-        const target = e.target;
+    onListItemChange(item: { id: string }, e: SyntheticEvent<>) {
+        const currentTarget = e.currentTarget;
 
         const items = this.state.items.map(it => {
             if (it.id === item.id) {
                 return Object.assign({}, it, {
-                    [target.name]: target.value
+                    // https://github.com/facebook/flow/issues/2099#issuecomment-272372086
+                    [(currentTarget: window.HTMLInputElement).name]: (currentTarget: window.HTMLInputElement).value
                 });
             }
 
@@ -178,7 +201,7 @@ export default class AddReceipt extends React.Component {
         });
     }
 
-    onListItemRemove(item, e) {
+    onListItemRemove(item: { id: string }, e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
 
         const items = this.state.items.filter(
@@ -201,7 +224,7 @@ export default class AddReceipt extends React.Component {
         });
     }
 
-    onSubmit(e) {
+    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         // TODO: More robust validation!
         e.preventDefault();
 
