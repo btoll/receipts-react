@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { List } from 'immutable';
 
 type Single = {
     item: { cost: number, productId: string, quantity: number },
@@ -31,7 +32,7 @@ const ListItem = ({
                 >
                     <option>Select Product</option>
                     {
-                        products.map(item =>
+                        List(products).map(item =>
                             // These IDs care coming from the db so they are safe to use.
                             <option
                                 key={item.id}
@@ -75,7 +76,7 @@ const ListItems = ({
     (
         <ul>
             {
-                items.map((item, i) =>
+                List(items).map((item, i) =>
                     <ListItem
                         key={i}
                         item={item}

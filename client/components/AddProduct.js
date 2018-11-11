@@ -2,6 +2,7 @@
 import React from 'react';
 import Error from './Error';
 import axios from 'axios';
+import { List } from 'immutable';
 import { PRODUCTS_URL } from '../config';
 
 type State = {
@@ -22,7 +23,7 @@ export default class AddProduct extends React.Component<{}, State> {
         this.state = {
             product: '',
             brand: '',
-            errors: []
+            errors: List([])
         };
 
         this.onCancel = this.onCancel.bind(this);
@@ -99,7 +100,7 @@ export default class AddProduct extends React.Component<{}, State> {
         this.setState({
             product: '',
             brand: '',
-            errors: []
+            errors: List([])
         });
     }
 
@@ -115,7 +116,7 @@ export default class AddProduct extends React.Component<{}, State> {
             .catch(() => console.log('error'));
         } else {
             this.setState({
-                errors: errors
+                errors: List(errors)
             });
         }
     }

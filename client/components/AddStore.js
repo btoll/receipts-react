@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-import Error from './Error';
 import axios from 'axios';
+import { List } from 'immutable';
+
+import Error from './Error';
 import { STORES_URL } from '../config';
 
 type State = {
@@ -30,7 +32,7 @@ export default class AddStore extends React.Component<{}, State> {
             state: '',
             zip: '',
             phone: '',
-            errors: []
+            errors: List([])
         };
 
         this.onCancel = this.onCancel.bind(this);
@@ -157,7 +159,7 @@ export default class AddStore extends React.Component<{}, State> {
             state: '',
             zip: '',
             phone: '',
-            errors: []
+            errors: List([])
         });
     }
 
@@ -166,7 +168,7 @@ export default class AddStore extends React.Component<{}, State> {
 
         if (!(this.state.store)) {
             this.setState({
-                errors: ['store']
+                errors: List(['store'])
             });
         } else {
             // TODO: Clear state when submitted.

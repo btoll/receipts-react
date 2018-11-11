@@ -1,8 +1,9 @@
 // @flow
 import React from 'react';
+import { List } from 'immutable';
 
 const Error = ({
-    fields = []
+    fields = List([])
 }: { fields: Array<string> }) =>
     (
         <div id="error">

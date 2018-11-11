@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-import Error from './Error';
 import axios from 'axios';
+import { List } from 'immutable';
+
+import Error from './Error';
 import { LOGIN_URL } from '../config';
 
 type Props = {
@@ -26,7 +28,7 @@ export default class Login extends React.Component<Props, State> {
         this.state = {
             username: '',
             password: '',
-            errors: []
+            errors: List([])
         };
 
         this.onCancel = this.onCancel.bind(this);
@@ -103,13 +105,14 @@ export default class Login extends React.Component<Props, State> {
         this.setState({
             username: '',
             password: '',
-            errors: []
+            errors: List([])
         });
     }
 
     onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
+        // TODO: Immutable
         const errors = Object.keys(this.state)
             .filter(key => !['errors'].includes(key) && !this.state[key]);
 
@@ -122,7 +125,7 @@ export default class Login extends React.Component<Props, State> {
             .catch(() => console.log('error'));
         } else {
             this.setState({
-                errors: errors
+                errors: List(errors)
             });
         }
     }

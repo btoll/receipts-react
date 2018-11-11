@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
+import axios from 'axios';
+import { List } from 'immutable';
+
 import Error from './Error';
 import ListItems from './ListItems';
-import axios from 'axios';
 import {
     PRODUCTS_URL,
     RECEIPTS_URL,
@@ -36,11 +38,11 @@ export default class AddReceipt extends React.Component<{}, State> {
             storeId: '',
             totalCost: 0.00,
             purchaseDate: '',
-            items: [],
-            errors: [],
+            items: List([]),
+            errors: List([]),
             // The following shouldn't be in state b/c they won't change in the form, but ???
-            products: [],
-            stores: []
+            products: List([]),
+            stores: List([])
         };
 
         this.onAdd = this.onAdd.bind(this);
@@ -138,8 +140,8 @@ export default class AddReceipt extends React.Component<{}, State> {
         ])
         .then(axios.spread((stores, products) =>
             this.setState({
-                stores: stores.data,
-                products: products.data
+                stores: List(stores.data),
+                products: List(products.data)
             })
         ))
         .catch(console.log);
@@ -148,7 +150,7 @@ export default class AddReceipt extends React.Component<{}, State> {
     onAdd(e: SyntheticMouseEvent<HTMLButtonElement>) {
         e.preventDefault();
 
-        const items = [
+        const items = List([
             ...this.state.items,
             {
                 id: incr(),
@@ -156,7 +158,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                 cost: 0,
                 quantity: 0
             }
-        ]
+        ]);
 
         this.setState({
             items: items
@@ -192,7 +194,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         });
 
         this.setState({
-            items: items
+            items: List(items)
         });
     }
 
@@ -213,8 +215,8 @@ export default class AddReceipt extends React.Component<{}, State> {
             storeId: '',
             totalCost: 0.00,
             purchaseDate: '',
-            items: [],
-            errors: []
+            items: List([]),
+            errors: List([])
         });
     }
 
@@ -222,6 +224,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         // TODO: More robust validation!
         e.preventDefault();
 
+        // TODO: Immutable
         const errors = Object.keys(this.state)
             .filter(key => !['errors', 'products', 'stores'].includes(key) && !this.state[key]);
 
@@ -242,17 +245,17 @@ export default class AddReceipt extends React.Component<{}, State> {
                 const msg = err.message;
 
                 this.setState({
-                    errors: [
+                    errors: List([
                         msg === 'Network Error' ?
                             `${msg} - Are you offline?` :
                             `${msg} - Make sure your data types match!`
-                    ]
+                    ])
                 });
             });
         } else {
             this.setState({
                 errors: !items ?
-                    [...errors, 'One or more of the items is blank'] :
+                    List([...errors, 'One or more of the items is blank']) :
                     errors
             });
         }
