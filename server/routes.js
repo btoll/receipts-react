@@ -1,4 +1,5 @@
-const mysql = require(process.env.RECEIPTS_DB);
+// TODO: Throw an exception if env var is not set!
+const mysql = require(process.env.RECEIPTS_DB || '');
 
 const routeFn = route =>
     (req, res, next) =>
