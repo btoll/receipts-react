@@ -13,7 +13,8 @@ TODO:
 ## Start the servers
 
 ```
-RECEIPTS_DB=/path/to/receipts_db.js ./scripts/start.sh
+npx webpack-dev-server --open
+node server/app
 ```
 
 ## Screenshots

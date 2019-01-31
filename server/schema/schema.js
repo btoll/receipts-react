@@ -1,5 +1,5 @@
 const graphql = require('graphql');
-const mysql = require(process.env.RECEIPTS_DB || '');
+const mysql = require('../db/receipts_db');
 
 const {
     GraphQLID,
