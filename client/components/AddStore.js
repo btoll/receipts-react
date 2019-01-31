@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
-import axios from 'axios';
+import { graphql } from 'react-apollo';
 import { List } from 'immutable';
 
 import Error from './Error';
 import { STORES_URL } from '../config';
+import { addStoreMutation } from '../queries/queries';
 
 type State = {
-    store: string,
-    street: string,
+    name: string,
+    street1: string,
+    street2: string,
     city: string,
     state: string,
     zip: string,
@@ -16,7 +18,7 @@ type State = {
     errors: Array<string>
 };
 
-export default class AddStore extends React.Component<{}, State> {
+class AddStore extends React.Component<{}, State> {
     onCancel: Function;
     onChange: Function;
     onReset: Function;
@@ -26,8 +28,9 @@ export default class AddStore extends React.Component<{}, State> {
         super();
 
         this.state = {
-            store: '',
-            street: '',
+            name: '',
+            street1: '',
+            street2: '',
             city: '',
             state: '',
             zip: '',
@@ -49,25 +52,36 @@ export default class AddStore extends React.Component<{}, State> {
                         <legend>Add Store</legend>
 
                         <div>
-                            <label htmlFor='store'>Name:</label>
+                            <label htmlFor='name'>Name:</label>
 
                             <input
                                 autoFocus
-                                id='store'
-                                name='store'
+                                id='name'
+                                name='name'
                                 type='text'
-                                value={this.state.store}
+                                value={this.state.name}
                                 onChange={this.onChange} />
                         </div>
 
                         <div>
-                            <label htmlFor='street'>Street:</label>
+                            <label htmlFor='street1'>Street1:</label>
 
                             <input
-                                id='street'
-                                name='street'
+                                id='street1'
+                                name='street1'
                                 type='text'
-                                value={this.state.street}
+                                value={this.state.street1}
+                                onChange={this.onChange} />
+                        </div>
+
+                        <div>
+                            <label htmlFor='street2'>Street2:</label>
+
+                            <input
+                                id='street2'
+                                name='street2'
+                                type='text'
+                                value={this.state.street2}
                                 onChange={this.onChange} />
                         </div>
 
@@ -121,7 +135,7 @@ export default class AddStore extends React.Component<{}, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.store === '' ? 'disabled' : ''}
+                                disabled={this.state.name === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -153,8 +167,9 @@ export default class AddStore extends React.Component<{}, State> {
 
     onReset() {
         this.setState({
-            store: '',
-            street: '',
+            name: '',
+            street1: '',
+            street2: '',
             city: '',
             state: '',
             zip: '',
@@ -163,19 +178,30 @@ export default class AddStore extends React.Component<{}, State> {
         });
     }
 
-    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
+    async onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        if (!(this.state.store)) {
+        if (!(this.state.name)) {
             this.setState({
-                errors: List(['store'])
+                errors: List(['name'])
             });
         } else {
-            // TODO: Clear state when submitted.
-            axios.post(STORES_URL, this.state)
-            .then(this.onReset)
-            .catch(() => console.log('error'));
+            await this.props.addStoreMutation({
+                variables: {
+                    name: this.state.name,
+                    street1: this.state.street1,
+                    street2: this.state.street2,
+                    city: this.state.city,
+                    state: this.state.state,
+                    zip: this.state.zip,
+                    phone: this.state.phone
+                }
+            });
+
+            this.onReset();
         }
     }
 }
+
+export default graphql(addStoreMutation, { name: 'addStoreMutation' })(AddStore);
 

@@ -4,14 +4,14 @@ import { List } from 'immutable';
 
 type Single = {
     item: { cost: number, productId: string, quantity: number },
-    products: Array<{ id: string, brand: string, product: string }>,
+    products: Array<{ id: string, brand: string, name: string }>,
     onChange: Function,
     onRemove: Function
 };
 
 type Many = {
     items: Array<{ cost: number, productId: string, quantity: number }>,
-    products: Array<{ id: string, brand: string, product: string }>,
+    products: Array<{ id: string, brand: string, name: string }>,
     onListItemChange: Function,
     onListItemRemove: Function
 };

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import axios from 'axios';
 import { List } from 'immutable';
 
 import Error from './Error';
@@ -117,12 +116,12 @@ export default class Login extends React.Component<Props, State> {
             .filter(key => !['errors'].includes(key) && !this.state[key]);
 
         if (!errors.length) {
-            axios.post(LOGIN_URL, this.state)
-            .then(data => (
-                this.onReset(),
-                this.props.onLogIn(data.data[0])
-            ))
-            .catch(() => console.log('error'));
+//            axios.post(LOGIN_URL, this.state)
+//            .then(data => (
+//                this.onReset(),
+//                this.props.onLogIn(data.data[0])
+//            ))
+//            .catch(() => console.log('error'));
         } else {
             this.setState({
                 errors: List(errors)

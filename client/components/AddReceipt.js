@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
-import axios from 'axios';
 import { List } from 'immutable';
+import { graphql, compose } from 'react-apollo';
 
 import Error from './Error';
 import ListItems from './ListItems';
@@ -11,6 +11,12 @@ import {
     STORES_URL,
     incr
 } from '../config';
+
+import {
+    addReceiptMutation,
+    getProductsQuery,
+    getStoresQuery
+} from '../queries/queries';
 
 type State = {
     storeId: string,
@@ -22,7 +28,7 @@ type State = {
     stores: Array<any>
 };
 
-export default class AddReceipt extends React.Component<{}, State> {
+class AddReceipt extends React.Component<{}, State> {
     onAdd: Function;
     onCancel: Function;
     onChange: Function;
@@ -72,8 +78,8 @@ export default class AddReceipt extends React.Component<{}, State> {
                             >
                                 <option>Select Store</option>
                                 {
-                                    this.state.stores.map((store) =>
-                                        <option key={store.id} value={store.id}>{store.store}</option>
+                                    !this.props.getStoresQuery.loading && this.props.getStoresQuery.stores.map((store) =>
+                                        <option key={store.id} value={store.id}>{store.name}</option>
                                     )
                                 }
                             </select>
@@ -85,7 +91,7 @@ export default class AddReceipt extends React.Component<{}, State> {
 
                             <ListItems
                                 items={this.state.items}
-                                products={this.state.products}
+                                products={this.props.getProductsQuery.loading ? [] : this.props.getProductsQuery.products}
                                 onListItemChange={this.onListItemChange}
                                 onListItemRemove={this.onListItemRemove}
                             />
@@ -131,20 +137,6 @@ export default class AddReceipt extends React.Component<{}, State> {
                 { !!this.state.errors.length && <Error fields={this.state.errors} /> }
             </>
         );
-    }
-
-    componentDidMount() {
-        axios.all([
-            axios.get(STORES_URL),
-            axios.get(PRODUCTS_URL)
-        ])
-        .then(axios.spread((stores, products) =>
-            this.setState({
-                stores: List(stores.data),
-                products: List(products.data)
-            })
-        ))
-        .catch(console.log);
     }
 
     onAdd(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -220,7 +212,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         });
     }
 
-    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
+    async onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         // TODO: More robust validation!
         e.preventDefault();
 
@@ -228,7 +220,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         const errors = Object.keys(this.state)
             .filter(key => !['errors', 'products', 'stores'].includes(key) && !this.state[key]);
 
-        const items = this.state.items.every(item => {
+        const items = this.state.items.filter(item => {
             let res = true;
 
             if (item.productId <= 0 || item.quantity <= 0) {
@@ -236,22 +228,37 @@ export default class AddReceipt extends React.Component<{}, State> {
             }
 
             return res;
-        });
+        })
+        .map(({id, productId, cost, quantity}) => (
+            {
+                id,
+                productId,
+                cost: parseFloat(cost) || 0,
+                quantity: parseFloat(quantity) || 0
+            }
+        ));
 
         if (!errors.length) {
-            axios.post(RECEIPTS_URL, this.state)
-            .then(this.onReset)
-            .catch(err => {
-                const msg = err.message;
-
-                this.setState({
-                    errors: List([
-                        msg === 'Network Error' ?
-                            `${msg} - Are you offline?` :
-                            `${msg} - Make sure your data types match!`
-                    ])
-                });
+            await this.props.addReceiptMutation({
+                variables: {
+                    storeId: this.state.storeId,
+                    totalCost: Number(this.state.totalCost),
+                    purchaseDate: this.state.purchaseDate,
+                    items
+                }
             });
+
+            this.onReset();
+
+            /*
+            this.setState({
+                errors: List([
+                    msg === 'Network Error' ?
+                        `${msg} - Are you offline?` :
+                        `${msg} - Make sure your data types match!`
+                ])
+            });
+            */
         } else {
             this.setState({
                 errors: !items ?
@@ -261,4 +268,10 @@ export default class AddReceipt extends React.Component<{}, State> {
         }
     }
 }
+
+export default compose(
+    graphql(addReceiptMutation, {name: 'addReceiptMutation'}),
+    graphql(getProductsQuery, {name: 'getProductsQuery'}),
+    graphql(getStoresQuery, {name: 'getStoresQuery'})
+)(AddReceipt);
 

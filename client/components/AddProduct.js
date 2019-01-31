@@ -1,17 +1,19 @@
 // @flow
 import React from 'react';
-import Error from './Error';
-import axios from 'axios';
+import { graphql } from 'react-apollo';
 import { List } from 'immutable';
+
+import Error from './Error';
 import { PRODUCTS_URL } from '../config';
+import { addProductMutation } from '../queries/queries';
 
 type State = {
-    product: string,
+    name: string,
     brand: string,
     errors: Array<string>
 };
 
-export default class AddProduct extends React.Component<{}, State> {
+class AddProduct extends React.Component<{}, State> {
     onCancel: Function;
     onChange: Function;
     onReset: Function;
@@ -21,7 +23,7 @@ export default class AddProduct extends React.Component<{}, State> {
         super();
 
         this.state = {
-            product: '',
+            name: '',
             brand: '',
             errors: List([])
         };
@@ -40,14 +42,14 @@ export default class AddProduct extends React.Component<{}, State> {
                         <legend>Add Product</legend>
 
                         <div>
-                            <label htmlFor='product'>Product:</label>
+                            <label htmlFor='name'>Product:</label>
 
                             <input
                                 autoFocus
-                                id='product'
-                                name='product'
+                                id='name'
+                                name='name'
                                 type='text'
-                                value={this.state.product}
+                                value={this.state.name}
                                 onChange={this.onChange} />
                         </div>
 
@@ -66,7 +68,7 @@ export default class AddProduct extends React.Component<{}, State> {
                             <button
                                 onClick={this.onSubmit}
                                 className='submit'
-                                disabled={this.state.brand === '' || this.state.product === '' ? 'disabled' : ''}
+                                disabled={this.state.brand === '' || this.state.name === '' ? 'disabled' : ''}
                                 type='submit'>
                                 Submit
                             </button>
@@ -98,22 +100,27 @@ export default class AddProduct extends React.Component<{}, State> {
 
     onReset() {
         this.setState({
-            product: '',
+            name: '',
             brand: '',
             errors: List([])
         });
     }
 
-    onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
+    async onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
             .filter(key => !['errors'].includes(key) && !this.state[key]);
 
         if (!errors.length) {
-            axios.post(PRODUCTS_URL, this.state)
-            .then(this.onReset)
-            .catch(() => console.log('error'));
+            await this.props.addProductMutation({
+                variables: {
+                    name: this.state.name,
+                    brand: this.state.brand
+                }
+            });
+
+            this.onReset();
         } else {
             this.setState({
                 errors: List(errors)
@@ -121,4 +128,6 @@ export default class AddProduct extends React.Component<{}, State> {
         }
     }
 }
+
+export default graphql(addProductMutation, { name: 'addProductMutation' })(AddProduct);
 

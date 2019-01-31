@@ -1,12 +1,8 @@
-const protocol = 'http://';
-const host = 'localhost';
-const port = '3000';
-
-const SOCKET = `${protocol}${host}:${port}`;
-const LOGIN_URL = `${SOCKET}/login`;
-const PRODUCTS_URL = `${SOCKET}/products`;
-const RECEIPTS_URL = `${SOCKET}/receipts`;
-const STORES_URL =  `${SOCKET}/stores`;
+//const protocol = 'http://';
+//const host = 'localhost';
+//const port = '3000';
+//
+//const SOCKET = `${protocol}${host}:${port}`;
 
 function* incrementer() {
     let n = 100;
@@ -21,9 +17,5 @@ const incr = (i =>
 )(incrementer());
 
 export {
-    LOGIN_URL,
-    PRODUCTS_URL,
-    RECEIPTS_URL,
-    STORES_URL,
     incr
 };
