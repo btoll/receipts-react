@@ -2,45 +2,29 @@
 import React from 'react';
 import { List } from 'immutable';
 
+import { Products as ProductsQuery } from '../queries/Products';
+
 type Single = {
     item: { cost: number, productId: string, quantity: number },
-    products: Array<{ id: string, brand: string, name: string }>,
     onChange: Function,
     onRemove: Function
 };
 
 type Many = {
     items: Array<{ cost: number, productId: string, quantity: number }>,
-    products: Array<{ id: string, brand: string, name: string }>,
     onListItemChange: Function,
     onListItemRemove: Function
 };
 
 const ListItem = ({
     item,
-    products,
     onChange,
     onRemove
 }: Single) =>
     (
         <li>
             <label htmlFor='productId'>Item:
-                <select
-                    name='productId'
-                    value={item.productId}
-                    onChange={onChange}
-                >
-                    <option>Select Product</option>
-                    {
-                        List(products).map(item =>
-                            // These IDs care coming from the db so they are safe to use.
-                            <option
-                                key={item.id}
-                                value={item.id}
-                            >{item.product} {item.brand}</option>
-                        )
-                    }
-                </select>
+                { ProductsQuery(item.productId, onChange) }
             </label>
 
             <label htmlFor='cost'>Cost:
@@ -69,7 +53,6 @@ const ListItem = ({
 
 const ListItems = ({
     items,
-    products,
     onListItemChange,
     onListItemRemove
 }: Many) =>
@@ -80,7 +63,6 @@ const ListItems = ({
                     <ListItem
                         key={i}
                         item={item}
-                        products={products}
                         onChange={onListItemChange.bind(null, item)}
                         onRemove={onListItemRemove.bind(null, item)}
                     />

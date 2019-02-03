@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
-import { graphql } from 'react-apollo';
+import { graphql, Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 import { List } from 'immutable';
 
 import Error from './Error';
 import { PRODUCTS_URL } from '../config';
-import { addProductMutation } from '../queries/queries';
 
 type State = {
     name: string,
@@ -13,7 +13,15 @@ type State = {
     errors: Array<string>
 };
 
-class AddProduct extends React.Component<{}, State> {
+const ADD_PRODUCT = gql`
+    mutation AddProduct($name: String!, $brand: String!) {
+        addProduct(name: $name, brand: $brand) {
+            id
+        }
+    }
+`;
+
+export default class AddProduct extends React.Component<{}, State> {
     onCancel: Function;
     onChange: Function;
     onReset: Function;
@@ -32,57 +40,6 @@ class AddProduct extends React.Component<{}, State> {
         this.onChange = this.onChange.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    render() {
-        return (
-            <>
-                <form className='add-product' onSubmit={this.onSubmit}>
-                    <fieldset>
-                        <legend>Add Product</legend>
-
-                        <div>
-                            <label htmlFor='name'>Product:</label>
-
-                            <input
-                                autoFocus
-                                id='name'
-                                name='name'
-                                type='text'
-                                value={this.state.name}
-                                onChange={this.onChange} />
-                        </div>
-
-                        <div>
-                            <label htmlFor='brand'>Brand:</label>
-
-                            <input
-                                id='brand'
-                                name='brand'
-                                type='text'
-                                value={this.state.brand}
-                                onChange={this.onChange} />
-                        </div>
-
-                        <div>
-                            <button
-                                onClick={this.onSubmit}
-                                className='submit'
-                                disabled={this.state.brand === '' || this.state.name === '' ? 'disabled' : ''}
-                                type='submit'>
-                                Submit
-                            </button>
-
-                            <button onClick={this.onCancel}>
-                                Cancel
-                            </button>
-                        </div>
-                    </fieldset>
-                </form>
-
-                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
-            </>
-        );
     }
 
     onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -106,14 +63,14 @@ class AddProduct extends React.Component<{}, State> {
         });
     }
 
-    async onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
+    async onSubmit(addProduct: Function, e: SyntheticMouseEvent<HTMLFormElement>) {
         e.preventDefault();
 
         const errors = Object.keys(this.state)
             .filter(key => !['errors'].includes(key) && !this.state[key]);
 
         if (!errors.length) {
-            await this.props.addProductMutation({
+            await addProduct({
                 variables: {
                     name: this.state.name,
                     brand: this.state.brand
@@ -127,7 +84,67 @@ class AddProduct extends React.Component<{}, State> {
             });
         }
     }
-}
 
-export default graphql(addProductMutation, { name: 'addProductMutation' })(AddProduct);
+    render() {
+        return (
+            <>
+                <Mutation
+                    mutation={ADD_PRODUCT}
+                >
+                    {(addProduct, { loading, error, data }) => {
+                        if (loading) return 'Loading...';
+                        if (error) return `[Error] ${error.message}`;
+
+                        return (
+                            <form className='add-product'>
+                                <fieldset>
+                                    <legend>Add Product</legend>
+
+                                    <div>
+                                        <label htmlFor='name'>Product:</label>
+
+                                        <input
+                                            autoFocus
+                                            id='name'
+                                            name='name'
+                                            type='text'
+                                            value={this.state.name}
+                                            onChange={this.onChange} />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor='brand'>Brand:</label>
+
+                                        <input
+                                            id='brand'
+                                            name='brand'
+                                            type='text'
+                                            value={this.state.brand}
+                                            onChange={this.onChange} />
+                                    </div>
+
+                                    <div>
+                                        <button
+                                            onClick={this.onSubmit.bind(this, addProduct)}
+                                            className='submit'
+                                            disabled={this.state.brand === '' || this.state.name === '' ? 'disabled' : ''}
+                                            type='submit'>
+                                            Submit
+                                        </button>
+
+                                        <button onClick={this.onCancel}>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        );
+                    }}
+                </Mutation>
+
+                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
+            </>
+        );
+    }
+}
 

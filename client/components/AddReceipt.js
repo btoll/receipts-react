@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
+import { graphql, Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
 import { List } from 'immutable';
-import { graphql, compose } from 'react-apollo';
 
 import Error from './Error';
 import ListItems from './ListItems';
@@ -12,23 +13,25 @@ import {
     incr
 } from '../config';
 
-import {
-    addReceiptMutation,
-    getProductsQuery,
-    getStoresQuery
-} from '../queries/queries';
+import { Stores as StoresQuery } from '../queries/Stores';
 
 type State = {
     storeId: string,
     totalCost: number,
     purchaseDate: string,
     items: Array<any>,
-    errors: Array<any>,
-    products: Array<any>,
-    stores: Array<any>
+    errors: Array<any>
 };
 
-class AddReceipt extends React.Component<{}, State> {
+const ADD_RECEIPT = gql`
+    mutation AddReceipt($storeId: ID!, $totalCost: Float!, $purchaseDate: String!, $items: [Item]) {
+        addReceipt(storeId: $storeId, totalCost: $totalCost, purchaseDate: $purchaseDate, items: $items) {
+            id
+        }
+    }
+`;
+
+export default class AddReceipt extends React.Component<{}, State> {
     onAdd: Function;
     onCancel: Function;
     onChange: Function;
@@ -45,10 +48,7 @@ class AddReceipt extends React.Component<{}, State> {
             totalCost: 0.00,
             purchaseDate: '',
             items: List([]),
-            errors: List([]),
-            // The following shouldn't be in state b/c they won't change in the form, but ???
-            products: List([]),
-            stores: List([])
+            errors: List([])
         };
 
         this.onAdd = this.onAdd.bind(this);
@@ -58,85 +58,6 @@ class AddReceipt extends React.Component<{}, State> {
         this.onListItemRemove = this.onListItemRemove.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-
-    render() {
-        return (
-            <>
-                <form className='add-receipt' onSubmit={this.onSubmit}>
-                    <fieldset>
-                        <legend>Add Receipt</legend>
-
-                        <div>
-                            <label htmlFor='stores'>Select Store:</label>
-                            <select
-                                autoFocus
-                                id='stores'
-                                name='storeId'
-                                value={this.state.storeId}
-                                onChange={this.onChange}
-                            >
-                                <option>Select Store</option>
-                                {
-                                    !this.props.getStoresQuery.loading && this.props.getStoresQuery.stores.map((store) =>
-                                        <option key={store.id} value={store.id}>{store.name}</option>
-                                    )
-                                }
-                            </select>
-                        </div>
-
-                        <div id='items'>
-                            <h3>Items</h3>
-                            <button onClick={this.onAdd}>+</button>
-
-                            <ListItems
-                                items={this.state.items}
-                                products={this.props.getProductsQuery.loading ? [] : this.props.getProductsQuery.products}
-                                onListItemChange={this.onListItemChange}
-                                onListItemRemove={this.onListItemRemove}
-                            />
-                        </div>
-
-                        <div>
-                            <label htmlFor='totalCost'>Total Cost:</label>
-                            <input
-                                id='totalCost'
-                                name='totalCost'
-                                type='text'
-                                value={this.state.totalCost}
-                                onChange={this.onChange} />
-                        </div>
-
-                        <div>
-                            <label htmlFor='purchaseDate'>Date of Purchase:</label>
-                            <input
-                                id='purchaseDate'
-                                name='purchaseDate'
-                                type='text'
-                                placeholder='mm/dd/yyyy'
-                                value={this.state.purchaseDate}
-                                onChange={this.onChange} />
-                        </div>
-
-                        <div>
-                            <button
-                                onClick={this.onSubmit}
-                                className='submit'
-                                disabled={this.state.purchaseDate === '' || this.state.storeId === '' || this.state.totalCost === '' ? 'disabled' : ''}
-                                type='submit'>
-                                Submit
-                            </button>
-
-                            <button onClick={this.onCancel}>
-                                Cancel
-                            </button>
-                        </div>
-                    </fieldset>
-                </form>
-
-                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
-            </>
-        );
     }
 
     onAdd(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -212,7 +133,7 @@ class AddReceipt extends React.Component<{}, State> {
         });
     }
 
-    async onSubmit(e: SyntheticMouseEvent<HTMLFormElement>) {
+    async onSubmit(addReceipt: Function, e: SyntheticMouseEvent<HTMLFormElement>) {
         // TODO: More robust validation!
         e.preventDefault();
 
@@ -239,7 +160,7 @@ class AddReceipt extends React.Component<{}, State> {
         ));
 
         if (!errors.length) {
-            await this.props.addReceiptMutation({
+            await addReceipt({
                 variables: {
                     storeId: this.state.storeId,
                     totalCost: Number(this.state.totalCost),
@@ -267,11 +188,81 @@ class AddReceipt extends React.Component<{}, State> {
             });
         }
     }
-}
 
-export default compose(
-    graphql(addReceiptMutation, {name: 'addReceiptMutation'}),
-    graphql(getProductsQuery, {name: 'getProductsQuery'}),
-    graphql(getStoresQuery, {name: 'getStoresQuery'})
-)(AddReceipt);
+    render() {
+        return (
+            <>
+                <Mutation
+                    mutation={ADD_RECEIPT}
+                >
+                    {(addReceipt, { loading, error, data }) => {
+                        if (loading) return 'Loading...';
+                        if (error) return `[Error] ${error.message}`;
+
+                        return (
+                            <form className='add-receipt' onSubmit={this.onSubmit}>
+                                <fieldset>
+                                    <legend>Add Receipt</legend>
+
+                                    <div>
+                                        <label htmlFor='stores'>Select Store:</label>
+                                        { StoresQuery(this.state.storeId, this.onChange) }
+                                    </div>
+
+                                    <div id='items'>
+                                        <h3>Items</h3>
+                                        <button onClick={this.onAdd}>+</button>
+
+                                        <ListItems
+                                            items={this.state.items}
+                                            onListItemChange={this.onListItemChange}
+                                            onListItemRemove={this.onListItemRemove}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor='totalCost'>Total Cost:</label>
+                                        <input
+                                            id='totalCost'
+                                            name='totalCost'
+                                            type='text'
+                                            value={this.state.totalCost}
+                                            onChange={this.onChange} />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor='purchaseDate'>Date of Purchase:</label>
+                                        <input
+                                            id='purchaseDate'
+                                            name='purchaseDate'
+                                            type='text'
+                                            placeholder='YYYY-MM-DD'
+                                            value={this.state.purchaseDate}
+                                            onChange={this.onChange} />
+                                    </div>
+
+                                    <div>
+                                        <button
+                                            onClick={this.onSubmit.bind(this, addReceipt)}
+                                            className='submit'
+                                            disabled={this.state.purchaseDate === '' || this.state.storeId === '' || this.state.totalCost === '' ? 'disabled' : ''}
+                                            type='submit'>
+                                            Submit
+                                        </button>
+
+                                        <button onClick={this.onCancel}>
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        );
+                    }}
+                </Mutation>
+
+                { !!this.state.errors.length && <Error fields={this.state.errors} /> }
+            </>
+        );
+    }
+}
 
