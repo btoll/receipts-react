@@ -6,7 +6,6 @@ import { List } from 'immutable';
 
 import Error from './Error';
 import { STORES_URL } from '../config';
-import { addStoreMutation } from '../queries/queries';
 
 type State = {
     name: string,

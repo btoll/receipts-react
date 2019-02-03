@@ -5,13 +5,21 @@ import { List } from 'immutable';
 import { Products as ProductsQuery } from '../queries/Products';
 
 type Single = {
-    item: { cost: number, productId: string, quantity: number },
+    item: {
+        cost: number,
+        productId: string,
+        quantity: number
+    },
     onChange: Function,
     onRemove: Function
 };
 
 type Many = {
-    items: Array<{ cost: number, productId: string, quantity: number }>,
+    items: Array<{
+        cost: number,
+        productId: string,
+        quantity: number
+    }>,
     onListItemChange: Function,
     onListItemRemove: Function
 };

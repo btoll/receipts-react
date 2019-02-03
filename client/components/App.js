@@ -2,7 +2,9 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
-import ApolloClient from 'apollo-boost';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+import ApolloClient from 'apollo-client';
+import { createHttpLink } from 'apollo-link-http';
 
 import AddProduct from './AddProduct';
 import AddReceipt from './AddReceipt';
@@ -12,7 +14,10 @@ import Nav from './Nav';
 import Query from './Query';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:3000/graphql'
+    cache: new InMemoryCache(),
+    link: createHttpLink({
+        uri: 'http://localhost:3000/graphql'
+    })
 });
 
 const App = () =>
