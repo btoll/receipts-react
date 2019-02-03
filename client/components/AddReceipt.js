@@ -196,66 +196,68 @@ export default class AddReceipt extends React.Component<{}, State> {
                     mutation={ADD_RECEIPT}
                 >
                     {(addReceipt, { loading, error, data }) => {
-                        if (loading) return 'Loading...';
-                        if (error) return `[Error] ${error.message}`;
-
                         return (
-                            <form className='add-receipt' onSubmit={this.onSubmit}>
-                                <fieldset>
-                                    <legend>Add Receipt</legend>
+                            <>
+                                <form className='add-receipt' onSubmit={this.onSubmit}>
+                                    <fieldset>
+                                        <legend>Add Receipt</legend>
 
-                                    <div>
-                                        <label htmlFor='stores'>Select Store:</label>
-                                        { StoresQuery(this.state.storeId, this.onChange) }
-                                    </div>
+                                        <div>
+                                            <label htmlFor='stores'>Select Store:</label>
+                                            { StoresQuery(this.state.storeId, this.onChange) }
+                                        </div>
 
-                                    <div id='items'>
-                                        <h3>Items</h3>
-                                        <button onClick={this.onAdd}>+</button>
+                                        <div id='items'>
+                                            <h3>Items</h3>
+                                            <button onClick={this.onAdd}>+</button>
 
-                                        <ListItems
-                                            items={this.state.items}
-                                            onListItemChange={this.onListItemChange}
-                                            onListItemRemove={this.onListItemRemove}
-                                        />
-                                    </div>
+                                            <ListItems
+                                                items={this.state.items}
+                                                onListItemChange={this.onListItemChange}
+                                                onListItemRemove={this.onListItemRemove}
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='totalCost'>Total Cost:</label>
-                                        <input
-                                            id='totalCost'
-                                            name='totalCost'
-                                            type='text'
-                                            value={this.state.totalCost}
-                                            onChange={this.onChange} />
-                                    </div>
+                                        <div>
+                                            <label htmlFor='totalCost'>Total Cost:</label>
+                                            <input
+                                                id='totalCost'
+                                                name='totalCost'
+                                                type='text'
+                                                value={this.state.totalCost}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='purchaseDate'>Date of Purchase:</label>
-                                        <input
-                                            id='purchaseDate'
-                                            name='purchaseDate'
-                                            type='text'
-                                            placeholder='YYYY-MM-DD'
-                                            value={this.state.purchaseDate}
-                                            onChange={this.onChange} />
-                                    </div>
+                                        <div>
+                                            <label htmlFor='purchaseDate'>Date of Purchase:</label>
+                                            <input
+                                                id='purchaseDate'
+                                                name='purchaseDate'
+                                                type='text'
+                                                placeholder='YYYY-MM-DD'
+                                                value={this.state.purchaseDate}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <button
-                                            onClick={this.onSubmit.bind(this, addReceipt)}
-                                            className='submit'
-                                            disabled={this.state.purchaseDate === '' || this.state.storeId === '' || this.state.totalCost === '' ? 'disabled' : ''}
-                                            type='submit'>
-                                            Submit
-                                        </button>
+                                        <div>
+                                            <button
+                                                onClick={this.onSubmit.bind(this, addReceipt)}
+                                                className='submit'
+                                                disabled={this.state.purchaseDate === '' || this.state.storeId === '' || this.state.totalCost === '' ? 'disabled' : ''}
+                                                type='submit'>
+                                                Submit
+                                            </button>
 
-                                        <button onClick={this.onCancel}>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </fieldset>
-                            </form>
+                                            <button onClick={this.onCancel}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                                { loading && <p>Loading...</p> }
+                                { error && <p>Error :( Please try again</p> }
+                            </>
                         );
                     }}
                 </Mutation>

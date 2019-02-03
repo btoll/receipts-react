@@ -109,109 +109,111 @@ export default class AddStore extends React.Component<{}, State> {
                     mutation={ADD_STORE}
                 >
                     {(addStore, { loading, error, data }) => {
-                        if (loading) return 'Loading...';
-                        if (error) return `[Error] ${error.message}`;
-
                         return (
-                            <form className='add-store'>
-                                <fieldset>
-                                    <legend>Add Store</legend>
+                            <>
+                                <form className='add-store'>
+                                    <fieldset>
+                                        <legend>Add Store</legend>
 
-                                    <div>
-                                        <label htmlFor='name'>Name:</label>
+                                        <div>
+                                            <label htmlFor='name'>Name:</label>
 
-                                        <input
-                                            autoFocus
-                                            id='name'
-                                            name='name'
-                                            type='text'
-                                            value={this.state.name}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                autoFocus
+                                                id='name'
+                                                name='name'
+                                                type='text'
+                                                value={this.state.name}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='street1'>Street1:</label>
+                                        <div>
+                                            <label htmlFor='street1'>Street1:</label>
 
-                                        <input
-                                            id='street1'
-                                            name='street1'
-                                            type='text'
-                                            value={this.state.street1}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='street1'
+                                                name='street1'
+                                                type='text'
+                                                value={this.state.street1}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='street2'>Street2:</label>
+                                        <div>
+                                            <label htmlFor='street2'>Street2:</label>
 
-                                        <input
-                                            id='street2'
-                                            name='street2'
-                                            type='text'
-                                            value={this.state.street2}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='street2'
+                                                name='street2'
+                                                type='text'
+                                                value={this.state.street2}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='city'>City:</label>
+                                        <div>
+                                            <label htmlFor='city'>City:</label>
 
-                                        <input
-                                            id='city'
-                                            name='city'
-                                            type='text'
-                                            value={this.state.city}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='city'
+                                                name='city'
+                                                type='text'
+                                                value={this.state.city}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='state'>State:</label>
+                                        <div>
+                                            <label htmlFor='state'>State:</label>
 
-                                        <input
-                                            id='state'
-                                            name='state'
-                                            type='text'
-                                            placeholder='MA'
-                                            value={this.state.state}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='state'
+                                                name='state'
+                                                type='text'
+                                                placeholder='MA'
+                                                value={this.state.state}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='zip'>Zip:</label>
+                                        <div>
+                                            <label htmlFor='zip'>Zip:</label>
 
-                                        <input
-                                            id='zip'
-                                            name='zip'
-                                            type='text'
-                                            value={this.state.zip}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='zip'
+                                                name='zip'
+                                                type='text'
+                                                value={this.state.zip}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='phone'>Phone:</label>
+                                        <div>
+                                            <label htmlFor='phone'>Phone:</label>
 
-                                        <input
-                                            id='phone'
-                                            name='phone'
-                                            type='text'
-                                            placeholder='717-737-8879'
-                                            value={this.state.phone}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='phone'
+                                                name='phone'
+                                                type='text'
+                                                placeholder='717-737-8879'
+                                                value={this.state.phone}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <button
-                                            onClick={this.onSubmit.bind(this, addStore)}
-                                            className='submit'
-                                            disabled={this.state.name === '' ? 'disabled' : ''}
-                                            type='submit'>
-                                            Submit
-                                        </button>
+                                        <div>
+                                            <button
+                                                onClick={this.onSubmit.bind(this, addStore)}
+                                                className='submit'
+                                                disabled={this.state.name === '' ? 'disabled' : ''}
+                                                type='submit'>
+                                                Submit
+                                            </button>
 
-                                        <button onClick={this.onCancel}>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </fieldset>
-                            </form>
+                                            <button onClick={this.onCancel}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                                { loading && <p>Loading...</p> }
+                                { error && <p>Error :( Please try again</p> }
+                            </>
                         );
                     }}
                 </Mutation>

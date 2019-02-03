@@ -28,9 +28,9 @@ export const Stores = (storeId: string, onChange: Function) => {
             displayName="StoresQuery"
             partialRefetch={true}
         >
-            {({ loading, err, data }) => {
+            {({ loading, error, data }) => {
                 if (loading) return 'Loading...';
-                if (err) return `[Error] ${err.message}`;
+                if (error) return `[Error] ${error.message}`;
 
                 return (
                     <select

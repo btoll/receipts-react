@@ -92,52 +92,54 @@ export default class AddProduct extends React.Component<{}, State> {
                     mutation={ADD_PRODUCT}
                 >
                     {(addProduct, { loading, error, data }) => {
-                        if (loading) return 'Loading...';
-                        if (error) return `[Error] ${error.message}`;
-
                         return (
-                            <form className='add-product'>
-                                <fieldset>
-                                    <legend>Add Product</legend>
+                            <>
+                                <form className='add-product'>
+                                    <fieldset>
+                                        <legend>Add Product</legend>
 
-                                    <div>
-                                        <label htmlFor='name'>Product:</label>
+                                        <div>
+                                            <label htmlFor='name'>Product:</label>
 
-                                        <input
-                                            autoFocus
-                                            id='name'
-                                            name='name'
-                                            type='text'
-                                            value={this.state.name}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                autoFocus
+                                                id='name'
+                                                name='name'
+                                                type='text'
+                                                value={this.state.name}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <label htmlFor='brand'>Brand:</label>
+                                        <div>
+                                            <label htmlFor='brand'>Brand:</label>
 
-                                        <input
-                                            id='brand'
-                                            name='brand'
-                                            type='text'
-                                            value={this.state.brand}
-                                            onChange={this.onChange} />
-                                    </div>
+                                            <input
+                                                id='brand'
+                                                name='brand'
+                                                type='text'
+                                                value={this.state.brand}
+                                                onChange={this.onChange} />
+                                        </div>
 
-                                    <div>
-                                        <button
-                                            onClick={this.onSubmit.bind(this, addProduct)}
-                                            className='submit'
-                                            disabled={this.state.brand === '' || this.state.name === '' ? 'disabled' : ''}
-                                            type='submit'>
-                                            Submit
-                                        </button>
+                                        <div>
+                                            <button
+                                                onClick={this.onSubmit.bind(this, addProduct)}
+                                                className='submit'
+                                                disabled={this.state.brand === '' || this.state.name === '' ? 'disabled' : ''}
+                                                type='submit'>
+                                                Submit
+                                            </button>
 
-                                        <button onClick={this.onCancel}>
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </fieldset>
-                            </form>
+                                            <button onClick={this.onCancel}>
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </fieldset>
+                                </form>
+
+                                { loading && <p>Loading...</p> }
+                                { error && <p>Error :( Please try again</p> }
+                            </>
                         );
                     }}
                 </Mutation>
