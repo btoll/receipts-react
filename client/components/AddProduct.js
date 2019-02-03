@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import { List } from 'immutable';
 
 import Error from './Error';
+import { GET_PRODUCTS } from '../queries/queries';
 import { PRODUCTS_URL } from '../config';
 
 type State = {
@@ -90,6 +91,14 @@ export default class AddProduct extends React.Component<{}, State> {
             <>
                 <Mutation
                     mutation={ADD_PRODUCT}
+                    update={(cache, { data: { addProduct } }) => {
+                        const { products } = cache.readQuery({ query: GET_PRODUCTS });
+
+                        cache.writeQuery({
+                            query: GET_PRODUCTS,
+                            data: { products: products.concat([addProduct]) },
+                        });
+                    }}
                 >
                     {(addProduct, { loading, error, data }) => {
                         return (

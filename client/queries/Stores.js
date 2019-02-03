@@ -4,22 +4,8 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { List } from 'immutable';
-import gql from 'graphql-tag';
 
-const GET_STORES = gql`
-    {
-        stores {
-            id
-            name
-            street1
-            street2
-            city
-            state
-            zip
-            phone
-        }
-    }
-`;
+import { GET_STORES } from './queries';
 
 export const Stores = (storeId: string, onChange: Function) => {
     return (

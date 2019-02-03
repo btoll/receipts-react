@@ -4,17 +4,8 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { List } from 'immutable';
-import gql from 'graphql-tag';
 
-const GET_PRODUCTS = gql`
-    {
-        products {
-            id
-            name
-            brand
-        }
-    }
-`;
+import { GET_PRODUCTS } from './queries';
 
 export const Products = (productId: string, onChange: Function) => {
     return (

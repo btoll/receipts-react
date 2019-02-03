@@ -1,18 +1,22 @@
 {
   "name": "receipts-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Track farm expenses",
   "main": "./client/index.js",
   "keywords": [
     "receipts",
     "expenses",
-    "farm"
+    "farm",
+    "react",
+    "graphql"
   ],
   "author": "Benjamin Toll <benjam72@yahoo.com> (http://www.benjamintoll.com)",
   "license": "GPLv3",
   "dependencies": {
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
+    "apollo-link": "^1.2.8",
+    "apollo-link-error": "^1.1.7",
     "apollo-link-http": "^1.5.11",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",

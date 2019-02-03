@@ -4,7 +4,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
+import { ApolloLink } from 'apollo-link';
+import { onError } from 'apollo-link-error';
+import { HttpLink } from 'apollo-link-http';
 
 import AddProduct from './AddProduct';
 import AddReceipt from './AddReceipt';
@@ -15,9 +17,25 @@ import Query from './Query';
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
-    link: createHttpLink({
-        uri: 'http://localhost:3000/graphql'
-    })
+    link: ApolloLink.from([
+        onError(({ graphQLErrors, networkError }) => {
+            if (graphQLErrors) {
+                graphQLErrors.map(({ message, locations, path }) =>
+                    console.log(
+                        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+                    )
+                );
+            }
+
+            if (networkError) {
+                console.log(`[Network error]: ${networkError}`);
+            }
+        }),
+        new HttpLink({
+            uri: 'http://localhost:3000/graphql',
+            credentials: 'same-origin'
+        })
+    ])
 });
 
 const App = () =>
