@@ -10,9 +10,6 @@
   ],
   "author": "Benjamin Toll <benjam72@yahoo.com> (http://www.benjamintoll.com)",
   "license": "GPLv3",
-  "scripts": {
-    "flow": "flow"
-  },
   "dependencies": {
     "apollo-boost": "^0.1.27",
     "body-parser": "^1.18.3",
