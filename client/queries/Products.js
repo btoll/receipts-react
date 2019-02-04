@@ -26,12 +26,12 @@ export const Products = (productId: string, onChange: Function) => {
                     >
                         <option>Select Product</option>
                         {
-                            List(data.products).map(item =>
+                            List(data.getProducts).map(item =>
                                 // These IDs care coming from the db so they are safe to use.
                                 <option
                                     key={item.id}
                                     value={item.id}
-                                >{item.product} {item.brand}</option>
+                                >{item.name} {item.brand}</option>
                             )
                         }
                     </select>

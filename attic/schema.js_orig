@@ -40,14 +40,13 @@ const ReceiptType = new GraphQLObjectType({
         storeId: {type: GraphQLID},
         totalCost: {type: GraphQLFloat},
         purchaseDate: {type: GraphQLString},
-        /*
-        items: {
-            type: new GraphQLList(ItemType),
-            resolve({id}, args) {
-//                return Receipt.find({authorId: id});
-            }
-        }
-        */
+//        items: {
+////            type: new GraphQLInputObjectType(ItemType),
+//            type: GraphQLList(ItemType),
+//            resolve({id}, args) {
+////                return Receipt.find({authorId: id});
+//            }
+//        }
     })
 });
 
@@ -78,6 +77,16 @@ const RootQuery = new GraphQLObjectType({
             type: new GraphQLList(ProductType),
             resolve() {
                 return mysql.query('products', { method: 'GET' })
+                .then(({results}) => {
+                    return results;
+                })
+                .catch(console.log);
+            }
+        },
+        receipts: {
+            type: new GraphQLList(ReceiptType),
+            resolve() {
+                return mysql.query('receipts', { method: 'GET' })
                 .then(({results}) => {
                     return results;
                 })

@@ -28,7 +28,7 @@ export const Stores = (storeId: string, onChange: Function) => {
                     >
                         <option>Select Store</option>
                         {
-                            List(data.stores).map((store) =>
+                            List(data.getStores).map((store) =>
                                 <option key={store.id} value={store.id}>{store.name}</option>
                             )
                         }

@@ -1,6 +1,6 @@
 {
   "name": "receipts-react",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "Track farm expenses",
   "main": "./client/index.js",
   "keywords": [
@@ -18,13 +18,14 @@
     "apollo-link": "^1.2.8",
     "apollo-link-error": "^1.1.7",
     "apollo-link-http": "^1.5.11",
+    "apollo-server-express": "^2.3.3",
     "body-parser": "^1.18.3",
     "client-sessions": "^0.8.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
-    "express-graphql": "^0.7.1",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
+    "graphql-tools": "^4.0.4",
     "immutable": "^4.0.0-rc.12",
     "mysql": "^2.16.0",
     "npx": "^10.2.0",

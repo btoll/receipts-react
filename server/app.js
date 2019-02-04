@@ -17,23 +17,26 @@ try {
     return;
 }
 
+const { ApolloServer, gql } = require('apollo-server-express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
-const graphqlHTTP = require('express-graphql');
 const path = require('path');
 
-const schema = require('./schema/schema');
+const { typeDefs } = require('./schema');
+const resolvers = require('./resolvers');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use('/graphql', graphqlHTTP({
-    schema,
-    graphiql: true
-}));
+const server = new ApolloServer({
+    typeDefs,
+    resolvers
+});
+
+server.applyMiddleware({ app });
 
 app.listen(3000, () => {
     console.log('Express listening on port 3000');

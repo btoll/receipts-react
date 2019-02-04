@@ -35,14 +35,24 @@ const createPromise = sql =>
         })
     );
 
-module.exports.query = (route, { method, body }) => {
+module.exports.query = (route, { type, args }) => {
     let sql;
 
     switch (route) {
+        case 'items':
+            if (type === 'GET') {
+                sql = `SELECT * FROM items WHERE receiptId = ${args.receiptId}`;
+            }
+
+            return createPromise(sql)
+            .catch(err => {
+                throw err;
+            });
+
         case 'login':
             sql = connection.format(
                 'SELECT username FROM users WHERE username = ?',
-                [body.username]
+                [args.username]
             );
 
             return createPromise(sql)
@@ -51,13 +61,15 @@ module.exports.query = (route, { method, body }) => {
             });
 
         case 'products':
-            if (method === 'POST') {
+            if (type === 'POST') {
                 sql = connection.format(
                     'INSERT INTO products VALUES(NULL, ?, ?)',
-                    [body.name, body.brand]
+                    [args.name, args.brand]
                 );
-            } else if (method === 'GET') {
+            } else if (type === 'GET') {
                 sql = 'SELECT * FROM products';
+            } else if (type === 'ONE') {
+                sql = `SELECT * FROM products WHERE id = ${args.productId}`;
             }
 
             return createPromise(sql)
@@ -66,52 +78,68 @@ module.exports.query = (route, { method, body }) => {
             });
 
         case 'receipts':
-            sql = connection.format(
-                'INSERT INTO receipts VALUES(NULL, ?, ?, ?)',
-                [
-                    Number(body.storeId),
-                    Number(body.totalCost),
-                    body.purchaseDate
-                ]
-            );
+            if (type === 'POST') {
+                sql = connection.format(
+                    'INSERT INTO receipts VALUES(NULL, ?, ?, ?)',
+                    [
+                        Number(args.storeId),
+                        Number(args.totalCost),
+                        args.purchaseDate
+                    ]
+                );
 
-            return createPromise(sql)
-            .then(data => {
-                return Promise.all((
-                    body.items.map(item =>
-                        createPromise(
-                            connection.format(
-                                'INSERT INTO items VALUES(NULL, ?, ?, ?, ?)',
-                                [
-                                    data.results.insertId,
-                                    Number(item.productId),
-                                    Number(item.cost),
-                                    Number(item.quantity)
-                                ]
+                return createPromise(sql)
+                .then(data => {
+                    return Promise.all((
+                        args.items.map(item =>
+                            createPromise(
+                                connection.format(
+                                    'INSERT INTO items VALUES(NULL, ?, ?, ?, ?)',
+                                    [
+                                        data.results.insertId,
+                                        Number(item.productId),
+                                        Number(item.cost),
+                                        Number(item.quantity)
+                                    ]
+                                )
                             )
                         )
-                    )
-                ));
-            })
-            .catch(err => {
-                throw err;
-            });
+                    ));
+                })
+                .catch(err => {
+                    throw err;
+                });
+            } else if (type === 'ONE') {
+                sql = `SELECT * FROM receipts WHERE id = ${args.id}`;
+
+                return createPromise(sql)
+                .catch(err => {
+                    throw err;
+                });
+            } else {
+                sql = 'SELECT * FROM receipts';
+
+                return createPromise(sql)
+                .catch(err => {
+                    throw err;
+                });
+            }
 
         case 'stores':
-            if (method === 'POST') {
+            if (type === 'POST') {
                 sql = connection.format(
                     'INSERT INTO stores VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)',
                     [
-                        body.name,
-                        body.street1,
-                        body.street1,
-                        body.city,
-                        body.state,
-                        body.zip,
-                        body.phone
+                        args.name,
+                        args.street1,
+                        args.street1,
+                        args.city,
+                        args.state,
+                        args.zip,
+                        args.phone
                     ]
                 );
-            } else if (method === 'GET') {
+            } else if (type === 'GET') {
                 sql = 'SELECT * FROM stores';
             }
 

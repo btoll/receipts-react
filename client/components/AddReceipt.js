@@ -198,7 +198,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                     {(addReceipt, { loading, error, data }) => {
                         return (
                             <>
-                                <form className='add-receipt' onSubmit={this.onSubmit}>
+                                <form className='add-receipt'>
                                     <fieldset>
                                         <legend>Add Receipt</legend>
 

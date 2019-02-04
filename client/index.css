@@ -14,7 +14,6 @@ ul.nav {
 ul.nav li {
     border: 1px solid turquoise;
     display: inline-block;
-    padding: 10px;
 }
 
 ul.nav li:hover {
@@ -25,6 +24,7 @@ ul.nav li:hover {
 ul.nav a {
     color: black;
     display: inline-block;
+    padding: 10px;
     text-decoration: none;
 }
 

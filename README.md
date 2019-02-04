@@ -5,7 +5,7 @@ This is a port from a program originally [written in C].  Its intent is to track
 It uses the following:
 
 - [React]
-- [Apollo Client]
+- [Apollo GraphQL]
 - [Flow]
 - [Immutable] well, kind of
 
@@ -52,7 +52,7 @@ Benjamin Toll
 
 [written in C]: https://github.com/btoll/receipts
 [React]: https://reactjs.org/
-[Apollo Client]: https://www.apollographql.com/
+[Apollo GraphQL]: https://www.apollographql.com/
 [Flow]: https://flow.org/
 [Immutable]: https://facebook.github.io/immutable-js/
 
