@@ -10,13 +10,13 @@ const GET_PRODUCTS = gql`
     }
 `;
 
-const getReceiptsQuery = gql`
+const GET_RECEIPTS = gql`
     {
         getReceipts {
             id
-            store_id
-            total_cost
-            purchase_date
+            storeId
+            totalCost
+            purchaseDate
         }
     }
 `;
@@ -38,6 +38,7 @@ const GET_STORES = gql`
 
 export {
     GET_PRODUCTS,
+    GET_RECEIPTS,
     GET_STORES
 };
 

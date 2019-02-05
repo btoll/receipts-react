@@ -6,6 +6,7 @@ import { List } from 'immutable';
 
 import Error from './Error';
 import { GET_PRODUCTS } from '../queries/queries';
+import ProductsGrid from '../queries/data-grid/Products';
 import { PRODUCTS_URL } from '../config';
 
 type State = {
@@ -92,13 +93,14 @@ export default class AddProduct extends React.Component<{}, State> {
                 <Mutation
                     mutation={ADD_PRODUCT}
                     update={(cache, { data: { addProduct } }) => {
-                        const { products } = cache.readQuery({ query: GET_PRODUCTS });
+                        const { getProducts } = cache.readQuery({ query: GET_PRODUCTS });
 
                         cache.writeQuery({
                             query: GET_PRODUCTS,
-                            data: { products: products.concat([addProduct]) },
+                            data: { getProducts: getProducts.concat([addProduct]) },
                         });
                     }}
+                    refetchQueries={[{query: GET_PRODUCTS}]}
                 >
                     {(addProduct, { loading, error, data }) => {
                         return (
@@ -146,6 +148,7 @@ export default class AddProduct extends React.Component<{}, State> {
                                     </fieldset>
                                 </form>
 
+                                { ProductsGrid() }
                                 { loading && <p>Loading...</p> }
                                 { error && <p>Error :( Please try again</p> }
                             </>

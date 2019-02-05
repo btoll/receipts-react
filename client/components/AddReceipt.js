@@ -13,7 +13,9 @@ import {
     incr
 } from '../config';
 
-import { Stores as StoresQuery } from '../queries/Stores';
+import StoresList from '../queries/StoresList';
+import ReceiptsGrid from '../queries/data-grid/Receipts';
+import { GET_RECEIPTS } from '../queries/queries';
 
 type State = {
     storeId: string,
@@ -194,6 +196,7 @@ export default class AddReceipt extends React.Component<{}, State> {
             <>
                 <Mutation
                     mutation={ADD_RECEIPT}
+                    refetchQueries={[{query: GET_RECEIPTS}]}
                 >
                     {(addReceipt, { loading, error, data }) => {
                         return (
@@ -204,7 +207,7 @@ export default class AddReceipt extends React.Component<{}, State> {
 
                                         <div>
                                             <label htmlFor='stores'>Select Store:</label>
-                                            { StoresQuery(this.state.storeId, this.onChange) }
+                                            { StoresList(this.state.storeId, this.onChange) }
                                         </div>
 
                                         <div id='items'>
@@ -255,6 +258,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                                     </fieldset>
                                 </form>
 
+                                { ReceiptsGrid() }
                                 { loading && <p>Loading...</p> }
                                 { error && <p>Error :( Please try again</p> }
                             </>

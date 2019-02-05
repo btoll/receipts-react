@@ -123,3 +123,31 @@ form div#items select {
     list-style-type: decimal;
 }
 
+/********************************* Griddle **************************************/
+section#data-grid {
+    margin: 40px;
+}
+table.griddle-table {
+    margin-top: 20px;
+}
+.viewExperiment table.griddle-table {
+    display: block;
+    height: 550px;
+    overflow: auto;
+}
+thead.griddle-table-heading {
+    background-color: antiquewhite;
+}
+th.griddle-table-heading-cell {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+td.griddle-cell {
+    border-bottom: 1px solid #ccc;
+    padding: 15px;
+}
+/* Center all but the first cell. */
+tr.griddle-row td + td {
+    text-align: center;
+}
+
