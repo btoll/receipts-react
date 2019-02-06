@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { graphql, Mutation } from 'react-apollo';
+import Calendar from 'react-calendar'
 import gql from 'graphql-tag';
 import { List } from 'immutable';
 
@@ -20,7 +21,8 @@ import { GET_RECEIPTS } from '../queries/queries';
 type State = {
     storeId: string,
     totalCost: number,
-    purchaseDate: string,
+    purchaseDateString: string,
+    purchaseDateDate: Date,
     items: Array<any>,
     errors: Array<any>
 };
@@ -33,10 +35,14 @@ const ADD_RECEIPT = gql`
     }
 `;
 
+const getDateString = d =>
+    `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+
 export default class AddReceipt extends React.Component<{}, State> {
     onAdd: Function;
     onCancel: Function;
-    onChange: Function;
+    onDateChange: Function;
+    onFormControlChange: Function;
     onListItemChange: Function;
     onListItemRemove: Function;
     onReset: Function;
@@ -45,17 +51,21 @@ export default class AddReceipt extends React.Component<{}, State> {
     constructor() {
         super();
 
+        const today = (new Date());
+
         this.state = {
             storeId: '',
             totalCost: 0.00,
-            purchaseDate: '',
+            purchaseDateString: getDateString(today),
+            purchaseDateDate: today,
             items: List([]),
             errors: List([])
         };
 
         this.onAdd = this.onAdd.bind(this);
         this.onCancel = this.onCancel.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.onDateChange = this.onDateChange.bind(this);
+        this.onFormControlChange = this.onFormControlChange.bind(this);
         this.onListItemChange = this.onListItemChange.bind(this);
         this.onListItemRemove = this.onListItemRemove.bind(this);
         this.onReset = this.onReset.bind(this);
@@ -85,7 +95,14 @@ export default class AddReceipt extends React.Component<{}, State> {
         this.onReset();
     }
 
-    onChange(e: SyntheticEvent<>) {
+    onDateChange(d: Date) {
+        this.setState({
+            purchaseDateString: getDateString(d),
+            purchaseDateDate: d
+        });
+    }
+
+    onFormControlChange(e: SyntheticEvent<>) {
         const currentTarget = e.currentTarget;
 
         this.setState({
@@ -129,7 +146,8 @@ export default class AddReceipt extends React.Component<{}, State> {
         this.setState({
             storeId: '',
             totalCost: 0.00,
-            purchaseDate: '',
+            purchaseDateString: '',
+            purchaseDateDate: (new Date()),
             items: List([]),
             errors: List([])
         });
@@ -166,7 +184,7 @@ export default class AddReceipt extends React.Component<{}, State> {
                 variables: {
                     storeId: this.state.storeId,
                     totalCost: Number(this.state.totalCost),
-                    purchaseDate: this.state.purchaseDate,
+                    purchaseDate: this.state.purchaseDateString,
                     items
                 }
             });
@@ -207,7 +225,7 @@ export default class AddReceipt extends React.Component<{}, State> {
 
                                         <div>
                                             <label htmlFor='stores'>Select Store:</label>
-                                            { StoresList(this.state.storeId, this.onChange) }
+                                            { StoresList(this.state.storeId, this.onFormControlChange) }
                                         </div>
 
                                         <div id='items'>
@@ -228,18 +246,17 @@ export default class AddReceipt extends React.Component<{}, State> {
                                                 name='totalCost'
                                                 type='text'
                                                 value={this.state.totalCost}
-                                                onChange={this.onChange} />
+                                                onChange={this.onFormControlChange} />
                                         </div>
 
                                         <div>
                                             <label htmlFor='purchaseDate'>Date of Purchase:</label>
-                                            <input
+                                            <Calendar
                                                 id='purchaseDate'
                                                 name='purchaseDate'
-                                                type='text'
-                                                placeholder='YYYY-MM-DD'
-                                                value={this.state.purchaseDate}
-                                                onChange={this.onChange} />
+                                                value={this.state.purchaseDateDate}
+                                                onChange={this.onDateChange}
+                                            />
                                         </div>
 
                                         <div>
