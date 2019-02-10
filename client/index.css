@@ -4,6 +4,14 @@ body {
     font-family: sans-serif;
 }
 
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
 ul.nav {
     background-color: turquoise;
     list-style-type: none;
@@ -34,6 +42,10 @@ ul.nav a:hover {
 
 ul.nav a.active {
     text-decoration: underline;
+}
+
+button.add {
+    margin: 30px 0 0 40px;
 }
 
 form {
@@ -149,5 +161,10 @@ td.griddle-cell {
 /* Center all but the first cell. */
 tr.griddle-row td + td {
     text-align: center;
+}
+
+/********************************* Calendar **************************************/
+.react-calendar {
+    width: 100%;
 }
 

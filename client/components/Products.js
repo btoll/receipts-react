@@ -10,6 +10,7 @@ import ProductsGrid from '../queries/data-grid/Products';
 import { PRODUCTS_URL } from '../config';
 
 type State = {
+    display: string,
     name: string,
     brand: string,
     errors: Array<string>
@@ -23,16 +24,18 @@ const ADD_PRODUCT = gql`
     }
 `;
 
-export default class AddProduct extends React.Component<{}, State> {
+export default class Products extends React.Component<{}, State> {
     onCancel: Function;
     onChange: Function;
     onReset: Function;
     onSubmit: Function;
+    onToggle: Function;
 
     constructor() {
         super();
 
         this.state = {
+            display: 'hide',
             name: '',
             brand: '',
             errors: List([])
@@ -42,6 +45,7 @@ export default class AddProduct extends React.Component<{}, State> {
         this.onChange = this.onChange.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onToggle = this.onToggle.bind(this);
     }
 
     onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -87,7 +91,15 @@ export default class AddProduct extends React.Component<{}, State> {
         }
     }
 
+    onToggle() {
+        this.setState({
+            display: this.state.display === 'show' ? 'hide' : 'show'
+        });
+    }
+
     render() {
+        const cls = `add-product ${this.state.display}`;
+
         return (
             <>
                 <Mutation
@@ -105,7 +117,9 @@ export default class AddProduct extends React.Component<{}, State> {
                     {(addProduct, { loading, error, data }) => {
                         return (
                             <>
-                                <form className='add-product'>
+                                <button className="add" onClick={this.onToggle}>Add Product</button>
+
+                                <form className={cls}>
                                     <fieldset>
                                         <legend>Add Product</legend>
 

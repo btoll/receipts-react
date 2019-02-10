@@ -10,6 +10,7 @@ import StoresGrid from '../queries/data-grid/Stores';
 import { STORES_URL } from '../config';
 
 type State = {
+    display: string,
     name: string,
     street1: string,
     street2: string,
@@ -28,16 +29,18 @@ const ADD_STORE = gql`
     }
 `;
 
-export default class AddStore extends React.Component<{}, State> {
+export default class Stores extends React.Component<{}, State> {
     onCancel: Function;
     onChange: Function;
     onReset: Function;
     onSubmit: Function;
+    onToggle: Function;
 
     constructor() {
         super();
 
         this.state = {
+            display: 'hide',
             name: '',
             street1: '',
             street2: '',
@@ -52,6 +55,7 @@ export default class AddStore extends React.Component<{}, State> {
         this.onChange = this.onChange.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onToggle = this.onToggle.bind(this);
     }
 
     onCancel(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -104,7 +108,15 @@ export default class AddStore extends React.Component<{}, State> {
         }
     }
 
+    onToggle() {
+        this.setState({
+            display: this.state.display === 'show' ? 'hide' : 'show'
+        });
+    }
+
     render() {
+        const cls = `add-store ${this.state.display}`;
+
         return (
             <>
                 <Mutation
@@ -122,7 +134,9 @@ export default class AddStore extends React.Component<{}, State> {
                     {(addStore, { loading, error, data }) => {
                         return (
                             <>
-                                <form className='add-store'>
+                                <button className="add" onClick={this.onToggle}>Add Store</button>
+
+                                <form className={cls}>
                                     <fieldset>
                                         <legend>Add Store</legend>
 

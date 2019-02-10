@@ -19,6 +19,7 @@ import ReceiptsGrid from '../queries/data-grid/Receipts';
 import { GET_RECEIPTS } from '../queries/queries';
 
 type State = {
+    display: string,
     storeId: string,
     totalCost: number,
     purchaseDateString: string,
@@ -38,7 +39,7 @@ const ADD_RECEIPT = gql`
 const getDateString = d =>
     `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
 
-export default class AddReceipt extends React.Component<{}, State> {
+export default class Receipts extends React.Component<{}, State> {
     onAdd: Function;
     onCancel: Function;
     onDateChange: Function;
@@ -47,6 +48,7 @@ export default class AddReceipt extends React.Component<{}, State> {
     onListItemRemove: Function;
     onReset: Function;
     onSubmit: Function;
+    onToggle: Function;
 
     constructor() {
         super();
@@ -54,6 +56,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         const today = (new Date());
 
         this.state = {
+            display: 'hide',
             storeId: '',
             totalCost: 0.00,
             purchaseDateString: getDateString(today),
@@ -70,6 +73,7 @@ export default class AddReceipt extends React.Component<{}, State> {
         this.onListItemRemove = this.onListItemRemove.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onToggle = this.onToggle.bind(this);
     }
 
     onAdd(e: SyntheticMouseEvent<HTMLButtonElement>) {
@@ -209,7 +213,15 @@ export default class AddReceipt extends React.Component<{}, State> {
         }
     }
 
+    onToggle() {
+        this.setState({
+            display: this.state.display === 'show' ? 'hide' : 'show'
+        });
+    }
+
     render() {
+        const cls = `add-receipt ${this.state.display}`;
+
         return (
             <>
                 <Mutation
@@ -219,7 +231,9 @@ export default class AddReceipt extends React.Component<{}, State> {
                     {(addReceipt, { loading, error, data }) => {
                         return (
                             <>
-                                <form className='add-receipt'>
+                                <button className="add" onClick={this.onToggle}>Add Receipt</button>
+
+                                <form className={cls}>
                                     <fieldset>
                                         <legend>Add Receipt</legend>
 

@@ -8,9 +8,9 @@ import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { HttpLink } from 'apollo-link-http';
 
-import AddProduct from './AddProduct';
-import AddReceipt from './AddReceipt';
-import AddStore from './AddStore';
+import Products from './Products';
+import Receipts from './Receipts';
+import Stores from './Stores';
 import Home from './Home';
 import Nav from './Nav';
 import Query from './Query';
@@ -47,9 +47,9 @@ const App = () =>
 
                     <Switch>
                         <Route exact path='/' component={Home} />
-                        <Route path='/add-receipt' component={AddReceipt} />
-                        <Route path='/add-store' component={AddStore} />
-                        <Route path='/add-product' component={AddProduct} />
+                        <Route path='/receipts' component={Receipts} />
+                        <Route path='/stores' component={Stores} />
+                        <Route path='/products' component={Products} />
                         <Route path='/query' component={Query} />
                         <Route render={() => <p>404 Not Found</p>} />
                     </Switch>

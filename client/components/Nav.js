@@ -12,20 +12,20 @@ export default function Nav() {
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/add-receipt'>
-                    Add Receipt
+                <NavLink activeClassName='active' to='/receipts'>
+                    Receipts
                 </NavLink>
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/add-store'>
-                    Add Store
+                <NavLink activeClassName='active' to='/stores'>
+                    Stores
                 </NavLink>
             </li>
 
             <li>
-                <NavLink activeClassName='active' to='/add-product'>
-                    Add Product
+                <NavLink activeClassName='active' to='/products'>
+                    Products
                 </NavLink>
             </li>
 
