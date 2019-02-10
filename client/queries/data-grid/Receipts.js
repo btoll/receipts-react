@@ -8,6 +8,11 @@ import { List } from 'immutable';
 
 import { GET_RECEIPTS } from '../queries';
 
+const getDateString = d => {
+    debugger;
+    return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+}
+
 const ReceiptsGrid = () => {
     return (
         <Query
@@ -39,7 +44,15 @@ const ReceiptsGrid = () => {
                                 />
                                 <ColumnDefinition id="storeId" title="Store ID" width={250} />
                                 <ColumnDefinition id="totalCost" title="Total Cost" width={80} />
-                                <ColumnDefinition id="purchaseDate" title="Purchase Date" width={80} />
+                                <ColumnDefinition
+                                    id="purchaseDate"
+                                    title="Purchase Date"
+                                    width={120}
+                                    customComponent={
+                                        ({value}) =>
+                                            <span>{getDateString(new Date(value * 1))}</span>
+                                    }
+                                />
                             </RowDefinition>
                         </Griddle>
                     </section>
