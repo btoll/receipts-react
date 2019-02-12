@@ -132,7 +132,7 @@ module.exports.query = (route, { type, args }) => {
                     [
                         args.name,
                         args.street1,
-                        args.street1,
+                        args.street2,
                         args.city,
                         args.state,
                         args.zip,
